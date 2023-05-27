@@ -12,6 +12,7 @@ interface TimerState {
 }
 
 export const useTimer = () => {
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [timerState, setTimerState] = useState<TimerState>({
     countdown: FOCUS_TIME_MINUTES,
     mode: 'Focus',
@@ -49,15 +50,15 @@ export const useTimer = () => {
         })),
       1000,
     );
-    // setIntervalId(id);
+    setIntervalId(id);
   };
 
   const stopCountdown = () => {
     setTimerState({ ...timerState, isRunning: false });
-    // if (intervalId) {
-    //   clearInterval(intervalId);
-    // }
-    // setIntervalId(null);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+    setIntervalId(null);
   };
 
   const toggleTimer = () => {
