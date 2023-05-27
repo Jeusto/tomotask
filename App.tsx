@@ -1,14 +1,16 @@
 import { Stack } from './components/layout/Stack';
-import { Group } from './components/layout/Group';
+import { TimerDisplay } from './components/pomodoro/TimerDisplay';
+import { TimerModeSelection } from './components/pomodoro/TimerModeSelection';
+import { TimerActionSection } from './components/pomodoro/TimerActionSection';
+import { modeColors } from './utils/theme';
 
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import Feather from '@expo/vector-icons/Feather';
-import { Animated, StyleSheet, Text, View, Pressable } from 'react-native';
+import { Animated, StyleSheet, Text } from 'react-native';
 
-const FOCUS_TIME_MINUTES = 0.2 * 60 * 1000;
-const BREAK_TIME_MINUTES = 0.1 * 60 * 1000;
-const LONG_BREAK_TIME_MINUTES = 0.1 * 60 * 1000;
+const FOCUS_TIME_MINUTES = 25 * 60 * 1000;
+const BREAK_TIME_MINUTES = 5 * 60 * 1000;
+const LONG_BREAK_TIME_MINUTES = 15 * 60 * 1000;
 
 type TimerModes = 'Focus' | 'Short Break' | 'Long Break';
 
@@ -17,6 +19,57 @@ export default function App() {
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
   const [timerMode, setTimerMode] = useState<TimerModes>('Focus');
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (timerCount === 0) {
+      if (timerMode === 'Focus') {
+        setTimerMode('Short Break');
+        setTimerCount(BREAK_TIME_MINUTES);
+      } else {
+        setTimerMode('Focus');
+        setTimerCount(FOCUS_TIME_MINUTES);
+      }
+      stopCountdown();
+    }
+  }, [timerCount]);
+
+  useEffect(() => {
+    if (timerMode === 'Focus') {
+      setTimerCount(FOCUS_TIME_MINUTES);
+    } else if (timerMode === 'Short Break') {
+      setTimerCount(BREAK_TIME_MINUTES);
+    } else {
+      setTimerCount(LONG_BREAK_TIME_MINUTES);
+    }
+  }, [timerMode]);
+
+  const startCountdown = () => {
+    setIsTimerRunning(true);
+    const id = setInterval(() => setTimerCount((prev) => prev - 1000), 1000);
+    setIntervalId(id);
+  };
+
+  const stopCountdown = () => {
+    setIsTimerRunning(false);
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+    setIntervalId(null);
+  };
+
+  const toggleTimer = () => {
+    isTimerRunning ? stopCountdown() : startCountdown();
+  };
+
+  const nextTimerMode = () => {
+    if (timerMode === 'Focus') {
+      setTimerMode('Short Break');
+    } else if (timerMode === 'Short Break') {
+      setTimerMode('Long Break');
+    } else {
+      setTimerMode('Focus');
+    }
+  };
 
   const backgroundColor = useState(new Animated.Value(0))[0];
 
@@ -41,66 +94,20 @@ export default function App() {
     container: {
       backgroundColor: interpolatedColor as any,
     },
-    buttonText: {
-      color:
-        timerMode === 'Focus'
-          ? '#ba4949'
-          : timerMode === 'Short Break'
-          ? '#38858a'
-          : '#397097',
-    },
   });
 
   return (
     <Animated.View style={[staticStyles.container, dynamicStyles.container]}>
       <StatusBar style="auto" />
-      <Text style={staticStyles.modeButtonText}>Tomotask 🍅</Text>
-      <Stack style={staticStyles.timerSection} spacing="xs">
-        <Group spacing="xs">
-          <Pressable
-            onPress={() => setTimerMode('Focus')}
-            style={[
-              staticStyles.modeButton,
-              timerMode === 'Focus' && staticStyles.activeModeButton,
-            ]}
-          >
-            <Text style={staticStyles.modeButtonText}>Focus</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => setTimerMode('Short Break')}
-            style={[
-              staticStyles.modeButton,
-              timerMode === 'Short Break' && staticStyles.activeModeButton,
-            ]}
-          >
-            <Text style={staticStyles.modeButtonText}>Short Break</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => setTimerMode('Long Break')}
-            style={[
-              staticStyles.modeButton,
-              timerMode === 'Long Break' && staticStyles.activeModeButton,
-            ]}
-          >
-            <Text style={staticStyles.modeButtonText}>Long Break</Text>
-          </Pressable>
-        </Group>
-        <Text style={staticStyles.timerText}>10:50</Text>
-        <View style={staticStyles.actionSection}>
-          <Pressable
-            style={staticStyles.button}
-            onPress={() => {
-              setIsTimerRunning(!isTimerRunning);
-            }}
-          >
-            <Text style={[staticStyles.buttonText, dynamicStyles.buttonText]}>
-              {isTimerRunning ? 'Pause' : 'Start'}
-            </Text>
-          </Pressable>
-          <Pressable style={staticStyles.skipButton}>
-            <Feather name="skip-forward" size={32} color="white" />
-          </Pressable>
-        </View>
+      <Text>Tomotask 🍅</Text>
+      <Stack spacing="xs">
+        <TimerModeSelection timerMode={timerMode} setTimerMode={setTimerMode} />
+        <TimerDisplay countdown={timerCount} />
+        <TimerActionSection
+          isTimerRunning={isTimerRunning}
+          timerMode={timerMode}
+          toggleTimer={toggleTimer}
+        />
       </Stack>
     </Animated.View>
   );
@@ -112,62 +119,8 @@ const staticStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  button: {
-    borderWidth: 0,
-    borderRadius: 4,
-    shadowColor: 'rgb(235, 235, 235)',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    fontSize: 22,
-    height: 55,
-    color: 'rgb(186, 73, 73)',
-    fontWeight: 'bold',
-    width: 200,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    transform: [{ translateY: 6 }],
-  },
-  buttonText: {
-    fontSize: 22,
-  },
-  timer: {
+  title: {
     fontSize: 40,
     color: 'white',
-  },
-  timerText: {
-    fontSize: 100,
-    color: 'white',
-    fontWeight: '500',
-  },
-  modeButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
-  },
-  activeModeButton: {
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-  },
-  modeButtonText: {
-    color: 'white',
-  },
-  timerSection: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 30,
-    paddingHorizontal: 50,
-    borderRadius: 10,
-  },
-  actionSection: {
-    position: 'relative',
-  },
-  skipButton: {
-    position: 'absolute',
-    right: -50,
-    top: '30%',
   },
 });
