@@ -1,5 +1,6 @@
 import type { SingleTodo } from '../../utils/types';
 import { Group } from '../layout/Group';
+import { useSound } from '../../hooks/useSound';
 
 import { Text, StyleSheet } from 'react-native';
 import Checkbox from 'expo-checkbox';
@@ -8,6 +9,8 @@ interface Props extends SingleTodo {
   check: (id: number) => void;
 }
 
+const checkAudioFile = require('../../assets/audio/check.mp3');
+
 export const TodoItem = ({
   id,
   name,
@@ -15,6 +18,8 @@ export const TodoItem = ({
   checked,
   check,
 }: Props) => {
+  const playSound = useSound(checkAudioFile);
+
   return (
     <Group justify="space-between" style={styles.container}>
       <Group spacing="xs">
@@ -22,7 +27,10 @@ export const TodoItem = ({
           style={styles.checkbox}
           color={checked ? '#e06c75' : '#eee'}
           value={true}
-          onValueChange={() => check(id)}
+          onValueChange={() => {
+            playSound();
+            check(id);
+          }}
         />
         <Text style={[styles.name, checked && styles.checkedName]}>{name}</Text>
       </Group>

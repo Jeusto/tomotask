@@ -1,8 +1,11 @@
 import type { TimerMode } from '../../utils/types';
 import { modeColors } from '../../utils/theme';
+import { useSound } from '../../hooks/useSound';
 
 import { Text, Pressable, View, StyleSheet } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
+
+const buttonSoundFile = require('../../assets/audio/button-press.wav');
 
 type Props = {
   isTimerRunning: boolean;
@@ -17,6 +20,8 @@ export const TimerActionSection = ({
   toggleTimer,
   setNextTimerMode,
 }: Props) => {
+  const playSound = useSound(buttonSoundFile);
+
   const dynamicStyles = StyleSheet.create({
     buttonText: {
       color: modeColors[timerMode],
@@ -28,6 +33,7 @@ export const TimerActionSection = ({
       <Pressable
         style={staticStyles.button}
         onPress={() => {
+          playSound();
           toggleTimer();
         }}
       >

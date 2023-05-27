@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
 import type { TimerMode } from '../utils/types';
+import { useSound } from './useSound';
+
+import { useState, useEffect } from 'react';
 
 interface TimerState {
   countdown: number;
@@ -29,7 +31,10 @@ const TIMER_MODES: Record<
   },
 };
 
+const alarmSoundFile = require('../assets/audio/alarm-kitchen.mp3');
+
 export const useTimer = () => {
+  const playSound = useSound(alarmSoundFile);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [timerState, setTimerState] = useState<TimerState>({
     countdown: FOCUS_TIME_MINUTES,
@@ -38,15 +43,19 @@ export const useTimer = () => {
   });
 
   useEffect(() => {
-    if (timerState.countdown === 0) {
+    if (timerState.countdown <= 0) {
+      playSound();
+      stopCountdown();
+
       const currentMode = TIMER_MODES[timerState.mode];
+      const nextMode = currentMode.nextMode;
+
       setTimerState({
         ...timerState,
-        mode: currentMode.nextMode,
-        countdown: currentMode.duration,
+        mode: nextMode,
+        countdown: TIMER_MODES[nextMode].duration,
         isRunning: false,
       });
-      stopCountdown();
     }
   }, [timerState.countdown]);
 
