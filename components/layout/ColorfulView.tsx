@@ -1,13 +1,13 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, ViewProps } from 'react-native';
 
-interface ColorfulView {
+interface ColorfulView extends ViewProps {
   timerMode: string;
   children: React.ReactNode;
 }
 
-export const ColorfulView = ({ children, timerMode }: ColorfulView) => {
+export const ColorfulView = ({ children, timerMode, style }: ColorfulView) => {
   const backgroundColor = useState(new Animated.Value(0))[0];
   const focusColor = '#ba4949';
   const shortBreakColor = '#38858a';
@@ -36,6 +36,8 @@ export const ColorfulView = ({ children, timerMode }: ColorfulView) => {
   });
 
   return (
-    <Animated.View style={dynamicStyles.container}>{children}</Animated.View>
+    <Animated.View style={[dynamicStyles.container, style]}>
+      {children}
+    </Animated.View>
   );
 };

@@ -19,7 +19,7 @@ interface GroupProps extends ViewProps {
 export const Group = ({
   children,
   style,
-  align = 'flex-start',
+  align = 'center',
   grow = false,
   noWrap = false,
   justify = 'flex-start',

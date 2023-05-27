@@ -70,6 +70,8 @@ const staticStyles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 22,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
   actionSection: {
     position: 'relative',

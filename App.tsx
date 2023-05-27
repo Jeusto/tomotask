@@ -10,7 +10,7 @@ import { TodoItem } from './components/todolist/TodoItem';
 import { AddTodoButton } from './components/todolist/AddTodoButton';
 
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 
 export default function App() {
   const {
@@ -25,7 +25,7 @@ export default function App() {
   const { todos, checkTodo } = useTodoList();
 
   return (
-    <ColorfulView timerMode={mode}>
+    <ColorfulView timerMode={mode} style={{ paddingTop: 200 }}>
       <StatusBar style="auto" />
       <Text>Tomotask 🍅</Text>
       <Stack spacing="xs" style={staticStyles.pomodoroSection}>
@@ -40,9 +40,11 @@ export default function App() {
       </Stack>
       <Stack spacing="xs" style={staticStyles.todolistSection}>
         <TodoHeader />
-        {todos.map((todo) => (
-          <TodoItem key={todo.id} check={checkTodo} {...todo} />
-        ))}
+        <ScrollView>
+          {todos.map((todo) => (
+            <TodoItem key={todo.id} check={checkTodo} {...todo} />
+          ))}
+        </ScrollView>
         <AddTodoButton />
       </Stack>
     </ColorfulView>

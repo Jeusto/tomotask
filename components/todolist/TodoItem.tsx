@@ -16,14 +16,16 @@ export const TodoItem = ({
   check,
 }: Props) => {
   return (
-    <Group justify="space-between">
-      <Checkbox
-        style={styles.checkbox}
-        color={checked ? 'red' : '#eee'}
-        value={true}
-        onValueChange={() => check(id)}
-      />
-      <Text>{name}</Text>
+    <Group justify="space-between" style={styles.container}>
+      <Group spacing="xs">
+        <Checkbox
+          style={styles.checkbox}
+          color={checked ? '#e06c75' : '#eee'}
+          value={true}
+          onValueChange={() => check(id)}
+        />
+        <Text style={[styles.name, checked && styles.checkedName]}>{name}</Text>
+      </Group>
       <Text>{pomodoroCount}</Text>
     </Group>
   );
@@ -34,5 +36,20 @@ const styles = StyleSheet.create({
     margin: 8,
     color: 'green',
     backgroundColor: 'green',
+  },
+  container: {
+    backgroundColor: '#fff',
+    padding: 8,
+    margin: 8,
+    borderRadius: 8,
+    width: 350,
+  },
+  name: {
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  checkedName: {
+    textDecorationLine: 'line-through',
+    color: '#888',
   },
 });
