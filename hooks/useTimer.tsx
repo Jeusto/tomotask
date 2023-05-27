@@ -64,7 +64,6 @@ export const useTimer = () => {
   };
 
   const stopCountdown = () => {
-    setTimerState({ ...timerState, isRunning: false });
     if (intervalId) {
       clearInterval(intervalId);
     }
@@ -82,11 +81,15 @@ export const useTimer = () => {
 
   const setTimerMode = (mode: TimerMode) => {
     const newMode = TIMER_MODES[mode];
+
     setTimerState({
       ...timerState,
       mode,
       countdown: newMode.duration,
+      isRunning: false,
     });
+
+    stopCountdown();
   };
 
   return {
