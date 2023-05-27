@@ -1,8 +1,23 @@
 import { useState } from 'react';
-import type { TodoItem } from '../utils/types';
+import type { SingleTodo } from '../utils/types';
 
 export const useTodoList = () => {
-  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [todos, setTodos] = useState<SingleTodo[]>([
+    {
+      id: 1,
+      name: 'Practice React Native',
+      note: '',
+      pomodoroCount: 2,
+      checked: false,
+    },
+    {
+      id: 2,
+      name: 'Learn Ionic',
+      note: '',
+      pomodoroCount: 4,
+      checked: false,
+    },
+  ]);
 
   const addTodo = (name: string, note: string) => {
     const newTodo = {

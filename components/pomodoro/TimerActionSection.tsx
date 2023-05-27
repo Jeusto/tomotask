@@ -11,12 +11,12 @@ type Props = {
   setNextTimerMode: (mode: TimerMode) => void;
 };
 
-export const TimerActionSection: React.FC<Props> = ({
+export const TimerActionSection = ({
   isTimerRunning,
   timerMode,
   toggleTimer,
   setNextTimerMode,
-}) => {
+}: Props) => {
   const dynamicStyles = StyleSheet.create({
     buttonText: {
       color: modeColors[timerMode],

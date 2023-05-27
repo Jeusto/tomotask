@@ -4,7 +4,7 @@ type Props = {
   countdown: number;
 };
 
-export const TimerDisplay: React.FC<Props> = ({ countdown }) => {
+export const TimerDisplay = ({ countdown }: Props) => {
   const countDownDate = new Date(countdown);
 
   return (

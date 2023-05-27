@@ -1,6 +1,6 @@
 export type TimerMode = 'Focus' | 'Short Break' | 'Long Break';
 
-export type TodoItem = {
+export type SingleTodo = {
   id: number;
   name: string;
   note: string;

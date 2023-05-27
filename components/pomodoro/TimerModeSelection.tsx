@@ -7,10 +7,7 @@ type Props = {
   setTimerMode: (mode: TimerMode) => void;
 };
 
-export const TimerModeSelection: React.FC<Props> = ({
-  timerMode,
-  setTimerMode,
-}) => {
+export const TimerModeSelection = ({ timerMode, setTimerMode }: Props) => {
   return (
     <Group spacing="xs">
       <Pressable

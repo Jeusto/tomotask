@@ -1,9 +1,13 @@
 import { Stack } from './components/layout/Stack';
+import { ColorfulView } from './components/layout/ColorfulView';
+import { useTimer } from './hooks/useTimer';
 import { TimerDisplay } from './components/pomodoro/TimerDisplay';
 import { TimerModeSelection } from './components/pomodoro/TimerModeSelection';
 import { TimerActionSection } from './components/pomodoro/TimerActionSection';
-import { ColorfulView } from './components/layout/ColorfulView';
-import { useTimer } from './hooks/useTimer';
+import { useTodoList } from './hooks/useTodoList';
+import { TodoHeader } from './components/todolist/TodoHeader';
+import { TodoItem } from './components/todolist/TodoItem';
+import { AddTodoButton } from './components/todolist/AddTodoButton';
 
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text } from 'react-native';
@@ -17,6 +21,8 @@ export default function App() {
     setNextTimerMode,
     setTimerMode,
   } = useTimer();
+
+  const { todos, checkTodo } = useTodoList();
 
   return (
     <ColorfulView timerMode={mode}>
@@ -33,7 +39,11 @@ export default function App() {
         />
       </Stack>
       <Stack spacing="xs" style={staticStyles.todolistSection}>
-        <></>
+        <TodoHeader />
+        {todos.map((todo) => (
+          <TodoItem key={todo.id} check={checkTodo} {...todo} />
+        ))}
+        <AddTodoButton />
       </Stack>
     </ColorfulView>
   );
