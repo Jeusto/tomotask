@@ -1,5 +1,6 @@
+import { getSpacing } from '../../utils/theme';
+
 import React from 'react';
-import { getSpacing } from './theme';
 import { View, StyleSheet, ViewProps } from 'react-native';
 
 interface StackProps extends ViewProps {

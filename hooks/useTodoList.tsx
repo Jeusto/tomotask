@@ -1,15 +1,8 @@
 import { useState } from 'react';
-
-type Todo = {
-  id: number;
-  name: string;
-  note: string;
-  pomodoroCount: number;
-  checked: boolean;
-};
+import type { TodoItem } from '../utils/types';
 
 export const useTodoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<TodoItem[]>([]);
 
   const addTodo = (name: string, note: string) => {
     const newTodo = {
