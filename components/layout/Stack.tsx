@@ -15,14 +15,14 @@ interface StackProps extends ViewProps {
   children: React.ReactNode;
 }
 
-export const Stack: React.FC<StackProps> = ({
+export const Stack = ({
   align = 'center',
   justify = 'flex-start',
   spacing = 'md',
   children,
   style,
   ...props
-}) => {
+}: StackProps) => {
   const customStyles = StyleSheet.create({
     stack: {
       flexDirection: 'column',

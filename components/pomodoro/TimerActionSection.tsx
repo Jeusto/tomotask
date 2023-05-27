@@ -8,12 +8,14 @@ type Props = {
   isTimerRunning: boolean;
   timerMode: TimerMode;
   toggleTimer: () => void;
+  setNextTimerMode: (mode: TimerMode) => void;
 };
 
 export const TimerActionSection: React.FC<Props> = ({
   isTimerRunning,
   timerMode,
   toggleTimer,
+  setNextTimerMode,
 }) => {
   const dynamicStyles = StyleSheet.create({
     buttonText: {
@@ -33,9 +35,14 @@ export const TimerActionSection: React.FC<Props> = ({
           {isTimerRunning ? 'Pause' : 'Start'}
         </Text>
       </Pressable>
-      <Pressable style={staticStyles.skipButton}>
-        <Feather name="skip-forward" size={32} color="white" />
-      </Pressable>
+      {isTimerRunning && (
+        <Pressable
+          style={staticStyles.skipButton}
+          onPress={() => setNextTimerMode(timerMode)}
+        >
+          <Feather name="skip-forward" size={32} color="white" />
+        </Pressable>
+      )}
     </View>
   );
 };

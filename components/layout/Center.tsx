@@ -1,15 +1,10 @@
-import React from 'react';
 import { View, StyleSheet, ViewProps } from 'react-native';
 
 interface CenterProps extends ViewProps {
   children: React.ReactNode;
 }
 
-export const Center: React.FC<CenterProps> = ({
-  children,
-  style,
-  ...props
-}) => {
+export const Center = ({ children, style, ...props }: CenterProps) => {
   return (
     <View style={[baseStyles.center, style]} {...props}>
       {children}

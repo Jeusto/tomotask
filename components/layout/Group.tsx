@@ -16,7 +16,7 @@ interface GroupProps extends ViewProps {
   spacing?: number | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export const Group: React.FC<GroupProps> = ({
+export const Group = ({
   children,
   style,
   align = 'flex-start',
@@ -25,7 +25,7 @@ export const Group: React.FC<GroupProps> = ({
   justify = 'flex-start',
   spacing = 'md',
   ...props
-}) => {
+}: GroupProps) => {
   const spacingStyle =
     typeof spacing === 'number'
       ? { marginHorizontal: spacing / 2 }
