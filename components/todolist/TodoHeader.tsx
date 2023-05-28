@@ -12,7 +12,7 @@ export const TodoHeader = ({ completedTaskCount, totalTaskCount }: Props) => {
     <Group justify="space-between" style={styles.container}>
       <Text style={styles.sectionTitle}>
         {totalTaskCount > 0
-          ? `Tasks done: ${completedTaskCount}/${totalTaskCount}`
+          ? `Tasks completed: ${completedTaskCount}/${totalTaskCount}`
           : 'Tasks:'}
       </Text>
     </Group>

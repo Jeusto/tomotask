@@ -2,12 +2,16 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, ViewProps } from 'react-native';
 
-interface ColorfulView extends ViewProps {
+interface ColorfulViewProps extends ViewProps {
   timerMode: string;
   children: React.ReactNode;
 }
 
-export const ColorfulView = ({ children, timerMode, style }: ColorfulView) => {
+export const ColorfulView = ({
+  children,
+  timerMode,
+  style,
+}: ColorfulViewProps) => {
   const backgroundColor = useState(new Animated.Value(0))[0];
   const focusColor = '#ba4949';
   const shortBreakColor = '#38858a';
