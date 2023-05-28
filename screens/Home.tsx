@@ -54,8 +54,8 @@ export function Home() {
                 {...todo}
               />
             ))}
+            <AddTodoButton />
           </ScrollView>
-          <AddTodoButton />
         </Stack>
       </Stack>
     </ColorfulView>

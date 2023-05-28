@@ -1,7 +1,7 @@
 import { Group } from '../layout/Group';
 import { Stack } from '../layout/Stack';
 
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 
 type Props = {
   completedTaskCount: number;
@@ -18,7 +18,6 @@ export const TodoHeader = ({ completedTaskCount, totalTaskCount }: Props) => {
             : 'Tasks:'}
         </Text>
       </Group>
-      <View style={styles.dividerLine} />
     </Stack>
   );
 };
@@ -31,12 +30,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: 'white',
-  },
-  dividerLine: {
-    width: 350,
-    borderStyle: 'dashed',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.7)',
-    borderRadius: 1,
   },
 });

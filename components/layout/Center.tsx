@@ -14,7 +14,6 @@ export const Center = ({ children, style, ...props }: CenterProps) => {
 
 const baseStyles = StyleSheet.create({
   center: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

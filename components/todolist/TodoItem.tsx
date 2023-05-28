@@ -2,7 +2,7 @@ import type { SingleTask } from '../../utils/types';
 import { Group } from '../layout/Group';
 import { useSound } from '../../hooks/useSound';
 
-import { Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Checkbox from 'expo-checkbox';
 
 interface Props extends SingleTask {
