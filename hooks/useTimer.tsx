@@ -50,10 +50,6 @@ export const useTimer = () => {
   });
 
   useEffect(() => {
-    console.log('timerState.isRunning', timerState.isRunning);
-  }, [timerState.isRunning]);
-
-  useEffect(() => {
     // Use the AppState to detect when the app goes in the background so that when it
     // comes back to the foreground, we can calculate how much time has passed and
     // update the countdown accordingly

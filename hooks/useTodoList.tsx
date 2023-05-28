@@ -72,7 +72,6 @@ export const useTodoList = () => {
   };
 
   const incrementPomodoroCount = () => {
-    console.log(JSON.stringify(tasks[0].pomodoroCount));
     setTasks(
       tasks.map((todo) => {
         if (todo.selected) {
