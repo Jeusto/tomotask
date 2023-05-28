@@ -9,3 +9,9 @@ export type SingleTask = {
   checked: boolean;
   selected: boolean;
 };
+
+export type NewTask = {
+  title: string;
+  note: string;
+  pomodoroEstimate: number;
+};

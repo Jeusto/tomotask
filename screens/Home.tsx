@@ -5,15 +5,15 @@ import { useTimer } from '../hooks/useTimer';
 import { TimerDisplay } from '../components/pomodoro/TimerDisplay';
 import { TimerModeSelection } from '../components/pomodoro/TimerModeSelection';
 import { TimerActionSection } from '../components/pomodoro/TimerActionSection';
-import { useTodoList } from '../hooks/useTodoList';
+import { useTodoList } from '../stores/todolistStore';
 import { TodoHeader } from '../components/todolist/TodoHeader';
 import { TodoItem } from '../components/todolist/TodoItem';
-import { AddTodoButton } from '../components/todolist/AddTodoButton';
+import { AddTodo } from '../components/todolist/AddTodo';
 
 import { Image, ScrollView, StyleSheet, Text } from 'react-native';
 
 export function Home() {
-  const { todos, checkTask, selectTask } = useTodoList();
+  const { tasks, checkTask, selectTask } = useTodoList();
   const {
     countdown,
     mode,
@@ -27,7 +27,10 @@ export function Home() {
     <ColorfulView timerMode={mode} style={styles.background}>
       <Stack>
         <Group spacing="xs">
-          <Image style={styles.logo} source={require('../assets/tomato.png')} />
+          <Image
+            style={styles.logo}
+            source={require('../assets/tomotask-icon.png')}
+          />
           <Text style={styles.title}>Tomotask</Text>
         </Group>
         <Stack spacing="xs" style={styles.pomodoroSection}>
@@ -42,19 +45,19 @@ export function Home() {
         </Stack>
         <Stack spacing="xs" style={styles.todolistSection}>
           <TodoHeader
-            completedTaskCount={todos.filter((t) => t.checked).length}
-            totalTaskCount={todos.length}
+            completedTaskCount={tasks.filter((t) => t.checked).length}
+            totalTaskCount={tasks.length}
           />
           <ScrollView>
-            {todos.map((todo) => (
+            {tasks.map((task) => (
               <TodoItem
-                key={todo.id}
+                key={task.id}
                 check={checkTask}
                 select={selectTask}
-                {...todo}
+                {...task}
               />
             ))}
-            <AddTodoButton />
+            <AddTodo />
           </ScrollView>
         </Stack>
       </Stack>
