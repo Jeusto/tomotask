@@ -40,7 +40,10 @@ export default function App() {
           />
         </Stack>
         <Stack spacing="xs" style={styles.todolistSection}>
-          <TodoHeader />
+          <TodoHeader
+            completedTaskCount={todos.filter((t) => t.checked).length}
+            totalTaskCount={todos.length}
+          />
           <ScrollView>
             {todos.map((todo) => (
               <TodoItem

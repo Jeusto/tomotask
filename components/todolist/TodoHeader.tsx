@@ -3,13 +3,20 @@ import { Stack } from '../layout/Stack';
 
 import { Text, StyleSheet, View } from 'react-native';
 
-type Props = {};
+type Props = {
+  completedTaskCount: number;
+  totalTaskCount: number;
+};
 
-export const TodoHeader = ({}: Props) => {
+export const TodoHeader = ({ completedTaskCount, totalTaskCount }: Props) => {
   return (
     <Stack>
       <Group justify="space-between" style={styles.container}>
-        <Text style={styles.sectionTitle}>Tasks</Text>
+        <Text style={styles.sectionTitle}>
+          {totalTaskCount > 0
+            ? `Tasks done: ${completedTaskCount}/${totalTaskCount}`
+            : 'Tasks:'}
+        </Text>
       </Group>
       <View style={styles.dividerLine} />
     </Stack>
@@ -27,7 +34,9 @@ const styles = StyleSheet.create({
   },
   dividerLine: {
     width: 350,
-    height: 1,
-    backgroundColor: '#eee',
+    borderStyle: 'dashed',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 1,
   },
 });

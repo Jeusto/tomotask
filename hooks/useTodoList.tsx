@@ -71,6 +71,18 @@ export const useTodoList = () => {
     setTodos([]);
   };
 
+  const incrementPomodoroCount = () => {
+    console.log(JSON.stringify(todos[0].pomodoroCount));
+    setTodos(
+      todos.map((todo) => {
+        if (todo.selected) {
+          return { ...todo, pomodoroCount: todo.pomodoroCount + 1 };
+        }
+        return todo;
+      }),
+    );
+  };
+
   return {
     todos,
     addTodo,
@@ -79,5 +91,6 @@ export const useTodoList = () => {
     selectTodo,
     deleteCheckedTodos,
     deleteAllTodos,
+    incrementPomodoroCount,
   };
 };
