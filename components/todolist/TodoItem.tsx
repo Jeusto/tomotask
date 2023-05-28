@@ -34,7 +34,7 @@ export const TodoItem = ({
           <Checkbox
             style={styles.checkbox}
             hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-            color={checked ? '#e06c75' : '#eee'}
+            color={checked ? '#ea5e57' : '#eee'}
             value={true}
             onValueChange={() => {
               playSound();

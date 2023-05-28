@@ -1,5 +1,4 @@
 import { Group } from '../layout/Group';
-import { Stack } from '../layout/Stack';
 
 import { Text, StyleSheet } from 'react-native';
 
@@ -10,15 +9,13 @@ type Props = {
 
 export const TodoHeader = ({ completedTaskCount, totalTaskCount }: Props) => {
   return (
-    <Stack>
-      <Group justify="space-between" style={styles.container}>
-        <Text style={styles.sectionTitle}>
-          {totalTaskCount > 0
-            ? `Tasks done: ${completedTaskCount}/${totalTaskCount}`
-            : 'Tasks:'}
-        </Text>
-      </Group>
-    </Stack>
+    <Group justify="space-between" style={styles.container}>
+      <Text style={styles.sectionTitle}>
+        {totalTaskCount > 0
+          ? `Tasks done: ${completedTaskCount}/${totalTaskCount}`
+          : 'Tasks:'}
+      </Text>
+    </Group>
   );
 };
 
