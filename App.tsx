@@ -22,7 +22,7 @@ export default function App() {
     setTimerMode,
   } = useTimer();
 
-  const { todos, checkTodo, selectTodo } = useTodoList();
+  const { todos, checkTask, selectTask } = useTodoList();
 
   return (
     <ColorfulView timerMode={mode} style={styles.background}>
@@ -48,8 +48,8 @@ export default function App() {
             {todos.map((todo) => (
               <TodoItem
                 key={todo.id}
-                check={checkTodo}
-                select={selectTodo}
+                check={checkTask}
+                select={selectTask}
                 {...todo}
               />
             ))}

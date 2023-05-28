@@ -1,11 +1,11 @@
-import type { SingleTodo } from '../../utils/types';
+import type { SingleTask } from '../../utils/types';
 import { Group } from '../layout/Group';
 import { useSound } from '../../hooks/useSound';
 
 import { Text, StyleSheet, Pressable } from 'react-native';
 import Checkbox from 'expo-checkbox';
 
-interface Props extends SingleTodo {
+interface Props extends SingleTask {
   check: (id: number) => void;
   select: (id: number) => void;
 }
@@ -14,7 +14,7 @@ const checkAudioFile = require('../../assets/audio/check.mp3');
 
 export const TodoItem = ({
   id,
-  name,
+  title: name,
   pomodoroCount,
   pomodoroEstimate,
   checked,

@@ -1,8 +1,8 @@
 export type TimerMode = 'Focus' | 'Short Break' | 'Long Break';
 
-export type SingleTodo = {
+export type SingleTask = {
   id: number;
-  name: string;
+  title: string;
   note: string;
   pomodoroCount: number;
   pomodoroEstimate: number;

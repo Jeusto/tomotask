@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { SingleTodo } from '../utils/types';
+import type { SingleTask } from '../utils/types';
 
 export const useTodoList = () => {
-  const [todos, setTodos] = useState<SingleTodo[]>([
+  const [tasks, setTasks] = useState<SingleTask[]>([
     {
       id: 1,
-      name: 'Practice React Native',
+      title: 'Practice React Native',
       note: '',
       pomodoroCount: 2,
       pomodoroEstimate: 4,
@@ -14,7 +14,7 @@ export const useTodoList = () => {
     },
     {
       id: 2,
-      name: 'Learn Ionic',
+      title: 'Learn Ionic',
       note: '',
       pomodoroCount: 0,
       pomodoroEstimate: 5,
@@ -23,10 +23,10 @@ export const useTodoList = () => {
     },
   ]);
 
-  const addTodo = (name: string, note: string) => {
-    const newTodo = {
+  const addTask = (title: string, note: string) => {
+    const newTask = {
       id: Date.now(),
-      name,
+      title,
       note,
       pomodoroCount: 0,
       pomodoroEstimate: 0,
@@ -34,16 +34,16 @@ export const useTodoList = () => {
       selected: false,
     };
 
-    setTodos([...todos, newTodo]);
+    setTasks([...tasks, newTask]);
   };
 
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const deleteTask = (id: number) => {
+    setTasks(tasks.filter((todo) => todo.id !== id));
   };
 
-  const checkTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) => {
+  const checkTask = (id: number) => {
+    setTasks(
+      tasks.map((todo) => {
         if (todo.id === id) {
           return { ...todo, checked: !todo.checked };
         }
@@ -52,9 +52,9 @@ export const useTodoList = () => {
     );
   };
 
-  const selectTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) => {
+  const selectTask = (id: number) => {
+    setTasks(
+      tasks.map((todo) => {
         if (todo.id === id) {
           return { ...todo, selected: true };
         }
@@ -63,18 +63,18 @@ export const useTodoList = () => {
     );
   };
 
-  const deleteCheckedTodos = () => {
-    setTodos(todos.filter((todo) => !todo.checked));
+  const deleteCheckedTasks = () => {
+    setTasks(tasks.filter((todo) => !todo.checked));
   };
 
-  const deleteAllTodos = () => {
-    setTodos([]);
+  const deleteAllTasks = () => {
+    setTasks([]);
   };
 
   const incrementPomodoroCount = () => {
-    console.log(JSON.stringify(todos[0].pomodoroCount));
-    setTodos(
-      todos.map((todo) => {
+    console.log(JSON.stringify(tasks[0].pomodoroCount));
+    setTasks(
+      tasks.map((todo) => {
         if (todo.selected) {
           return { ...todo, pomodoroCount: todo.pomodoroCount + 1 };
         }
@@ -84,13 +84,13 @@ export const useTodoList = () => {
   };
 
   return {
-    todos,
-    addTodo,
-    deleteTodo,
-    checkTodo,
-    selectTodo,
-    deleteCheckedTodos,
-    deleteAllTodos,
+    todos: tasks,
+    addTask,
+    deleteTask,
+    checkTask,
+    selectTask,
+    deleteCheckedTasks,
+    deleteAllTasks,
     incrementPomodoroCount,
   };
 };
