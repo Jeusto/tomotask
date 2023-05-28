@@ -1,7 +1,10 @@
 import type { TimerMode } from '../utils/types';
 import { useSound } from './useSound';
+import { useNotification } from './useNotification';
+import { useTodoList } from './useTodoList';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { AppState } from 'react-native';
 
 interface TimerState {
   countdown: number;
@@ -34,7 +37,11 @@ const TIMER_MODES: Record<
 const alarmSoundFile = require('../assets/audio/alarm-kitchen.mp3');
 
 export const useTimer = () => {
-  const playSound = useSound(alarmSoundFile);
+  const { playSound, stopSound } = useSound(alarmSoundFile);
+  const { scheduleNotification, cancelNotification } = useNotification();
+  const { incrementPomodoroCount } = useTodoList();
+
+  const leaveAppTimestamp = useRef<number | null>(null);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [timerState, setTimerState] = useState<TimerState>({
     countdown: FOCUS_TIME_MINUTES,
@@ -43,6 +50,24 @@ export const useTimer = () => {
   });
 
   useEffect(() => {
+    console.log('timerState.isRunning', timerState.isRunning);
+  }, [timerState.isRunning]);
+
+  useEffect(() => {
+    // Use the AppState to detect when the app goes in the background so that when it
+    // comes back to the foreground, we can calculate how much time has passed and
+    // update the countdown accordingly
+    const subscription = AppState.addEventListener(
+      'change',
+      (nextAppState: string) => {
+        if (nextAppState === 'background') {
+          leaveAppTimestamp.current = Date.now();
+        } else if (nextAppState === 'active') {
+          calculateElapsedTime();
+        }
+      },
+    );
+
     if (timerState.countdown <= 0) {
       playSound();
       stopCountdown();
@@ -57,10 +82,30 @@ export const useTimer = () => {
         isRunning: false,
       });
     }
+
+    return () => {
+      subscription.remove();
+    };
   }, [timerState.countdown]);
 
+  const calculateElapsedTime = () => {
+    if (leaveAppTimestamp.current && timerState.isRunning) {
+      const currentTimestamp = Date.now();
+      const elapsedMilliseconds = currentTimestamp - leaveAppTimestamp.current;
+      const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+
+      if (elapsedSeconds > 0) {
+        setTimerState((prev) => ({
+          ...prev,
+          countdown: Math.max(0, prev.countdown - elapsedMilliseconds),
+        }));
+
+        leaveAppTimestamp.current = null;
+      }
+    }
+  };
+
   const startCountdown = () => {
-    setTimerState({ ...timerState, isRunning: true });
     const id = setInterval(
       () =>
         setTimerState((prev) => ({
@@ -69,7 +114,14 @@ export const useTimer = () => {
         })),
       1000,
     );
+
+    setTimerState({ ...timerState, isRunning: true });
     setIntervalId(id);
+    scheduleNotification(
+      `Time's up!`,
+      `Time for the next mode: "${TIMER_MODES[timerState.mode].nextMode}"`,
+      timerState.countdown / 1000,
+    );
   };
 
   const stopCountdown = () => {
@@ -77,14 +129,22 @@ export const useTimer = () => {
       clearInterval(intervalId);
     }
     setIntervalId(null);
+    cancelNotification();
   };
 
   const toggleTimer = () => {
     timerState.isRunning ? stopCountdown() : startCountdown();
+
+    stopSound();
+    setTimerState({
+      ...timerState,
+      isRunning: !timerState.isRunning,
+    });
   };
 
   const setNextTimerMode = () => {
     const currentMode = TIMER_MODES[timerState.mode];
+    if (timerState.mode === 'Focus') incrementPomodoroCount();
     setTimerMode(currentMode.nextMode);
   };
 
@@ -99,6 +159,7 @@ export const useTimer = () => {
     });
 
     stopCountdown();
+    cancelNotification();
   };
 
   return {

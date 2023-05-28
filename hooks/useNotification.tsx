@@ -54,6 +54,15 @@ async function registerForPushNotificationsAsync() {
     return;
   }
 
-  const token = (await Notifications.getExpoPushTokenAsync()).data;
-  return token;
+  // TODO: Use React Native Notifications after ejecting
+  try {
+    const token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: 'fcacc142-5947-4fea-a934-2c053a5c7108',
+      })
+    ).data;
+    return token;
+  } catch (e) {
+    return '';
+  }
 }

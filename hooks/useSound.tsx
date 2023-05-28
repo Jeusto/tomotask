@@ -18,5 +18,9 @@ export const useSound = (soundFile: any) => {
     await sound?.playAsync();
   }
 
-  return playSound;
+  async function stopSound() {
+    await soundState?.stopAsync();
+  }
+
+  return { playSound, stopSound };
 };
