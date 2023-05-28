@@ -22,7 +22,7 @@ export default function App() {
     setTimerMode,
   } = useTimer();
 
-  const { todos, checkTodo } = useTodoList();
+  const { todos, checkTodo, selectTodo } = useTodoList();
 
   return (
     <ColorfulView timerMode={mode} style={styles.background}>
