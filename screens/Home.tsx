@@ -1,18 +1,23 @@
 import { ColorfulView } from '../components/layout/ColorfulView';
 import { Stack } from '../components/layout/Stack';
-import { Group } from '../components/layout/Group';
-import { useTimer } from '../hooks/useTimer';
 import { TimerDisplay } from '../components/pomodoro/TimerDisplay';
 import { TimerModeSelection } from '../components/pomodoro/TimerModeSelection';
 import { TimerActionSection } from '../components/pomodoro/TimerActionSection';
-import { useTodoList } from '../stores/todolistStore';
 import { TodoHeader } from '../components/todolist/TodoHeader';
 import { TodoItem } from '../components/todolist/TodoItem';
-import { AddTodo } from '../components/todolist/AddTodo';
+import { AddTaskDialog } from '../components/todolist/AddTaskDialog';
+import { AddTaskButton } from '../components/todolist/AddTaskButton';
+import { FloatingActionButton } from '../components/FloatingActionButton';
+import { UpdateTaskDialog } from '../components/todolist/UpdateTaskDialog';
+import { Header } from '../components/Header';
+import { useTodoList } from '../stores/todolistStore';
+import { useTimer } from '../hooks/useTimer';
 
-import { Image, ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 
-export function Home() {
+export function Home({ navigation }) {
   const { tasks, checkTask, selectTask } = useTodoList();
   const {
     countdown,
@@ -23,16 +28,26 @@ export function Home() {
     setTimerMode,
   } = useTimer();
 
+  const [addDialogVisible, setAddDialogVisible] = useState(false);
+  const showAddDialog = () => setAddDialogVisible(true);
+  const hideAddDialog = () => setAddDialogVisible(false);
+
+  const [updateDialogVisible, setUpdateDialogVisible] = useState({
+    visible: false,
+    taskId: -1,
+  });
+  const showUpdateDialog = (taskId: number) => {
+    setUpdateDialogVisible({ visible: true, taskId });
+  };
+  const hideUpdateDialog = () => {
+    setUpdateDialogVisible({ visible: false, taskId: -1 });
+  };
+
   return (
     <ColorfulView timerMode={mode} style={styles.background}>
+      <StatusBar style="auto" />
       <Stack>
-        <Group spacing="xs">
-          <Image
-            style={styles.logo}
-            source={require('../assets/tomotask-icon.png')}
-          />
-          <Text style={styles.title}>Tomotask</Text>
-        </Group>
+        <Header />
         <Stack spacing="xs" style={styles.pomodoroSection}>
           <TimerModeSelection timerMode={mode} setTimerMode={setTimerMode} />
           <TimerDisplay countdown={countdown} />
@@ -43,7 +58,7 @@ export function Home() {
             setNextTimerMode={setNextTimerMode}
           />
         </Stack>
-        <Stack spacing="xs" style={styles.todolistSection}>
+        <Stack spacing="xs">
           <TodoHeader
             completedTaskCount={tasks.filter((t) => t.checked).length}
             totalTaskCount={tasks.length}
@@ -54,22 +69,31 @@ export function Home() {
                 key={task.id}
                 check={checkTask}
                 select={selectTask}
+                showUpdateDialog={showUpdateDialog}
                 {...task}
               />
             ))}
-            <AddTodo />
+            <AddTaskButton showAddDialog={showAddDialog} />
           </ScrollView>
         </Stack>
       </Stack>
+      <FloatingActionButton
+        showAddDialog={showAddDialog}
+        navigateToSettings={() => navigation.navigate('Settings')}
+      />
+      <AddTaskDialog
+        dialogVisible={addDialogVisible}
+        hideDialog={hideAddDialog}
+      />
+      <UpdateTaskDialog
+        dialogVisible={updateDialogVisible}
+        hideDialog={hideUpdateDialog}
+      />
     </ColorfulView>
   );
 }
 
 const styles = StyleSheet.create({
-  logo: {
-    width: 50,
-    height: 50,
-  },
   background: {
     paddingTop: 250,
   },
@@ -78,15 +102,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    fontSize: 32,
-    color: 'white',
-  },
   pomodoroSection: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     padding: 30,
     paddingHorizontal: 50,
     borderRadius: 10,
   },
-  todolistSection: {},
 });

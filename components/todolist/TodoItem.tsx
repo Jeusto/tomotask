@@ -8,6 +8,7 @@ import Checkbox from 'expo-checkbox';
 interface Props extends SingleTask {
   check: (id: number) => void;
   select: (id: number) => void;
+  showUpdateDialog: (taskId: number) => void;
 }
 
 const checkAudioFile = require('../../assets/audio/check.mp3');
@@ -18,21 +19,16 @@ export const TodoItem = ({
   pomodoroCount,
   pomodoroEstimate,
   checked,
-  selected,
   check,
-  select,
+  showUpdateDialog,
 }: Props) => {
   const { playSound } = useSound(checkAudioFile);
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => select(id)}>
-      <Group
-        justify="space-between"
-        style={[styles.container, selected && styles.selectedContainer]}
-      >
+    <TouchableOpacity activeOpacity={0.8} onPress={() => showUpdateDialog(id)}>
+      <Group justify="space-between" style={styles.container}>
         <Group spacing="xs">
           <Checkbox
-            style={styles.checkbox}
             hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
             color={checked ? '#ea5e57' : '#eee'}
             value={true}
@@ -45,23 +41,20 @@ export const TodoItem = ({
             {name}
           </Text>
         </Group>
-        <Text style={styles.pomodoroCount}>
-          {pomodoroCount}/{pomodoroEstimate}
-        </Text>
+        {(pomodoroCount || pomodoroEstimate) > 0 && (
+          <Text style={styles.pomodoroCount}>
+            {pomodoroCount}/{pomodoroEstimate}
+          </Text>
+        )}
       </Group>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  checkbox: {
-    margin: 8,
-    color: 'green',
-    backgroundColor: 'green',
-  },
   container: {
     backgroundColor: '#fff',
-    padding: 8,
+    padding: 16,
     margin: 8,
     borderRadius: 8,
     width: 350,
@@ -78,10 +71,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
     color: '#888',
-  },
-  selectedContainer: {
-    borderLeftColor: '#000000B9',
-    borderLeftWidth: 4,
-    paddingLeft: 4,
   },
 });

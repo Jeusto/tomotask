@@ -6,6 +6,7 @@ interface TodoListState {
   tasks: SingleTask[];
   addTask: (newTaskDetails: NewTask) => void;
   deleteTask: (id: number) => void;
+  updateTask: (id: number, newTaskDetails: NewTask) => void;
   checkTask: (id: number) => void;
   selectTask: (id: number) => void;
   deleteCheckedTasks: () => void;
@@ -35,7 +36,6 @@ const useTodoListStore = create<TodoListState>((set) => ({
     },
   ],
   addTask: (newTaskDetails) => {
-    console.log(newTaskDetails);
     set((state) => ({
       tasks: [
         ...state.tasks,
@@ -54,6 +54,21 @@ const useTodoListStore = create<TodoListState>((set) => ({
   deleteTask: (id) => {
     set((state) => ({
       tasks: state.tasks.filter((todo) => todo.id !== id),
+    }));
+  },
+  updateTask: (id, newTaskDetails) => {
+    set((state) => ({
+      tasks: state.tasks.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            title: newTaskDetails.title,
+            note: newTaskDetails.note,
+            pomodoroEstimate: newTaskDetails.pomodoroEstimate,
+          };
+        }
+        return todo;
+      }),
     }));
   },
   checkTask: (id) => {
