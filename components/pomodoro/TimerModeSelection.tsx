@@ -1,4 +1,4 @@
-import { Text, StyleSheet, Pressable } from 'react-native';
+import { Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import type { TimerMode } from '../../utils/types';
 import { Group } from '../layout/Group';
 
@@ -10,33 +10,36 @@ type Props = {
 export const TimerModeSelection = ({ timerMode, setTimerMode }: Props) => {
   return (
     <Group spacing="xs">
-      <Pressable
+      <TouchableOpacity
         onPress={() => setTimerMode('Focus')}
+        hitSlop={{ top: 30, bottom: 30, left: 30, right: undefined }}
         style={[
           staticStyles.modeButton,
           timerMode === 'Focus' && staticStyles.activeModeButton,
         ]}
       >
         <Text style={staticStyles.modeButtonText}>Focus</Text>
-      </Pressable>
-      <Pressable
+      </TouchableOpacity>
+      <TouchableOpacity
         onPress={() => setTimerMode('Short Break')}
+        hitSlop={{ top: 30, bottom: 30, left: undefined, right: undefined }}
         style={[
           staticStyles.modeButton,
           timerMode === 'Short Break' && staticStyles.activeModeButton,
         ]}
       >
         <Text style={staticStyles.modeButtonText}>Short Break</Text>
-      </Pressable>
-      <Pressable
+      </TouchableOpacity>
+      <TouchableOpacity
         onPress={() => setTimerMode('Long Break')}
+        hitSlop={{ top: 30, bottom: 30, left: undefined, right: 30 }}
         style={[
           staticStyles.modeButton,
           timerMode === 'Long Break' && staticStyles.activeModeButton,
         ]}
       >
         <Text style={staticStyles.modeButtonText}>Long Break</Text>
-      </Pressable>
+      </TouchableOpacity>
     </Group>
   );
 };

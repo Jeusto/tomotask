@@ -2,8 +2,8 @@ import type { TimerMode } from '../../utils/types';
 import { modeColors } from '../../utils/theme';
 import { useSound } from '../../hooks/useSound';
 
-import { Text, Pressable, View, StyleSheet } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 const buttonSoundFile = require('../../assets/audio/button-press.wav');
 
@@ -30,8 +30,10 @@ export const TimerActionSection = ({
 
   return (
     <View style={staticStyles.actionSection}>
-      <Pressable
+      <TouchableOpacity
+        activeOpacity={0.8}
         style={staticStyles.button}
+        hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
         onPress={() => {
           playSound();
           toggleTimer();
@@ -40,14 +42,15 @@ export const TimerActionSection = ({
         <Text style={[staticStyles.buttonText, dynamicStyles.buttonText]}>
           {isTimerRunning ? 'Pause' : 'Start'}
         </Text>
-      </Pressable>
+      </TouchableOpacity>
       {isTimerRunning && (
-        <Pressable
+        <TouchableOpacity
           style={staticStyles.skipButton}
+          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
           onPress={() => setNextTimerMode(timerMode)}
         >
           <Feather name="skip-forward" size={32} color="white" />
-        </Pressable>
+        </TouchableOpacity>
       )}
     </View>
   );

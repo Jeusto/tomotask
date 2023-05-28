@@ -2,7 +2,7 @@ import type { SingleTask } from '../../utils/types';
 import { Group } from '../layout/Group';
 import { useSound } from '../../hooks/useSound';
 
-import { Text, StyleSheet, Pressable } from 'react-native';
+import { Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import Checkbox from 'expo-checkbox';
 
 interface Props extends SingleTask {
@@ -25,7 +25,7 @@ export const TodoItem = ({
   const { playSound } = useSound(checkAudioFile);
 
   return (
-    <Pressable onPress={() => select(id)}>
+    <TouchableOpacity activeOpacity={0.8} onPress={() => select(id)}>
       <Group
         justify="space-between"
         style={[styles.container, selected && styles.selectedContainer]}
@@ -33,6 +33,7 @@ export const TodoItem = ({
         <Group spacing="xs">
           <Checkbox
             style={styles.checkbox}
+            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
             color={checked ? '#e06c75' : '#eee'}
             value={true}
             onValueChange={() => {
@@ -48,7 +49,7 @@ export const TodoItem = ({
           {pomodoroCount}/{pomodoroEstimate}
         </Text>
       </Group>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
@@ -79,7 +80,8 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   selectedContainer: {
-    borderLeftColor: '#0000008F',
-    borderLeftWidth: 8,
+    borderLeftColor: '#000000B9',
+    borderLeftWidth: 4,
+    paddingLeft: 4,
   },
 });
