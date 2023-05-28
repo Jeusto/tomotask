@@ -20,7 +20,7 @@ export const TimerActionSection = ({
   toggleTimer,
   setNextTimerMode,
 }: Props) => {
-  const playSound = useSound(buttonSoundFile);
+  const { playSound } = useSound(buttonSoundFile);
 
   const dynamicStyles = StyleSheet.create({
     buttonText: {

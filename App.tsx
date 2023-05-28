@@ -25,33 +25,43 @@ export default function App() {
   const { todos, checkTodo } = useTodoList();
 
   return (
-    <ColorfulView timerMode={mode} style={{ paddingTop: 200 }}>
+    <ColorfulView timerMode={mode} style={styles.background}>
       <StatusBar style="auto" />
-      <Text>Tomotask 🍅</Text>
-      <Stack spacing="xs" style={staticStyles.pomodoroSection}>
-        <TimerModeSelection timerMode={mode} setTimerMode={setTimerMode} />
-        <TimerDisplay countdown={countdown} />
-        <TimerActionSection
-          isTimerRunning={isRunning}
-          timerMode={mode}
-          toggleTimer={toggleTimer}
-          setNextTimerMode={setNextTimerMode}
-        />
-      </Stack>
-      <Stack spacing="xs" style={staticStyles.todolistSection}>
-        <TodoHeader />
-        <ScrollView>
-          {todos.map((todo) => (
-            <TodoItem key={todo.id} check={checkTodo} {...todo} />
-          ))}
-        </ScrollView>
-        <AddTodoButton />
+      <Stack>
+        <Text style={styles.title}>Tomotask 🍅</Text>
+        <Stack spacing="xs" style={styles.pomodoroSection}>
+          <TimerModeSelection timerMode={mode} setTimerMode={setTimerMode} />
+          <TimerDisplay countdown={countdown} />
+          <TimerActionSection
+            isTimerRunning={isRunning}
+            timerMode={mode}
+            toggleTimer={toggleTimer}
+            setNextTimerMode={setNextTimerMode}
+          />
+        </Stack>
+        <Stack spacing="xs" style={styles.todolistSection}>
+          <TodoHeader />
+          <ScrollView>
+            {todos.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                check={checkTodo}
+                select={selectTodo}
+                {...todo}
+              />
+            ))}
+          </ScrollView>
+          <AddTodoButton />
+        </Stack>
       </Stack>
     </ColorfulView>
   );
 }
 
-const staticStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  background: {
+    paddingTop: 250,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
