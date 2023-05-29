@@ -12,12 +12,18 @@ import { UpdateTaskDialog } from '../components/todolist/UpdateTaskDialog';
 import { Header } from '../components/Header';
 import { useTodoList } from '../stores/todolistStore';
 import { useTimer } from '../hooks/useTimer';
+import type { RootStackParamList } from '../App';
 
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScrollView, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 
-export function Home({ navigation }) {
+interface HomeViewProps {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+}
+
+export function Home({ navigation }: HomeViewProps) {
   const { tasks, checkTask, selectTask } = useTodoList();
   const {
     countdown,

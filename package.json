@@ -1,7 +1,8 @@
 {
-  "name": "tomotask-react-native",
+  "name": "tomotask",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
+  "private": true,
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -38,6 +39,5 @@
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8",
     "typescript": "^4.9.4"
-  },
-  "private": true
+  }
 }
