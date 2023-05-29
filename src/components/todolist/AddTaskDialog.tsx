@@ -1,5 +1,5 @@
 import { useTodoList } from '@/stores/todolistStore';
-import { NewTask } from '@/utils/types';
+import { NewTask } from '@/models';
 
 import { StyleSheet, TextInput, Text } from 'react-native';
 import { Dialog } from '@rneui/themed';

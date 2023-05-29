@@ -1,5 +1,6 @@
+import type { TimerMode } from '@/models';
+
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import type { TimerMode } from '@/utils/types';
 import { Group } from '@/components/layout/Group';
 
 type Props = {

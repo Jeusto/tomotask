@@ -1,4 +1,4 @@
-import { SingleTask, NewTask } from '@/utils/types';
+import { SingleTask, NewTask } from '@/models';
 
 import { create } from 'zustand';
 

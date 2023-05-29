@@ -1,5 +1,5 @@
 import { useTodoList } from '@/stores/todolistStore';
-import { NewTask } from '@/utils/types';
+import { NewTask } from '@/models';
 
 import Feather from 'react-native-vector-icons/Feather';
 import { StyleSheet, TextInput } from 'react-native';

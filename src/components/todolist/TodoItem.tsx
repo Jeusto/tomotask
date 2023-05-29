@@ -1,4 +1,4 @@
-import type { SingleTask } from '@/utils/types';
+import type { SingleTask } from '@/models';
 import { Group } from '@/components/layout/Group';
 import { useSound } from '@/hooks/useSound';
 

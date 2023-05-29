@@ -1,4 +1,4 @@
-import type { TimerMode } from '@/utils/types';
+import type { TimerMode } from '@/models';
 import { modeColors } from '@/utils/theme';
 import { useSound } from '@/hooks/useSound';
 
