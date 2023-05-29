@@ -10,7 +10,7 @@ import { AddTaskButton } from '@/components/todolist/AddTaskButton';
 import { FloatingActionButton } from '@/components/FloatingActionButton';
 import { UpdateTaskDialog } from '@/components/todolist/UpdateTaskDialog';
 import { Header } from '@/components/Header';
-import { useTodoList } from '@/stores/todolistStore';
+import { useTodolistStore } from '@/stores/todolistStore';
 import { useTimer } from '@/hooks/useTimer';
 import type { RootStackParamList } from '../../App';
 
@@ -24,7 +24,7 @@ interface HomeViewProps {
 }
 
 export function Home({ navigation }: HomeViewProps) {
-  const { tasks, checkTask, selectTask } = useTodoList();
+  const { tasks, checkTask, selectTask } = useTodolistStore();
   const {
     countdown,
     mode,

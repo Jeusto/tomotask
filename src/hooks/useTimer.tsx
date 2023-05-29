@@ -1,7 +1,7 @@
 import type { TimerMode } from '@/models';
 import { useSound } from '@/hooks/useSound';
 import { useNotification } from '@/hooks/useNotification';
-import { useTodoList } from '@/stores/todolistStore';
+import { useTodolistStore } from '@/stores/todolistStore';
 
 import { useState, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
@@ -39,7 +39,7 @@ const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 export const useTimer = () => {
   const { playSound, stopSound } = useSound(alarmSoundFile);
   const { scheduleNotification, cancelNotification } = useNotification();
-  const { incrementPomodoroCount } = useTodoList();
+  const { incrementPomodoroCount } = useTodolistStore();
 
   const leaveAppTimestamp = useRef<number | null>(null);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);

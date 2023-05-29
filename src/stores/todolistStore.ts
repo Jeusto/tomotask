@@ -16,7 +16,7 @@ export interface TodoListState {
   incrementPomodoroCount: () => void;
 }
 
-export const useTodoList = create(
+export const useTodolistStore = create(
   persist<TodoListState>(
     (set) => ({
       tasks: [],

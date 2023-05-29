@@ -1,4 +1,4 @@
-import { useTodoList } from '@/stores/todolistStore';
+import { useTodolistStore } from '@/stores/todolistStore';
 import { NewTask } from '@/models';
 
 import { StyleSheet, TextInput, Text } from 'react-native';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const AddTaskDialog = ({ dialogVisible, hideDialog }: Props) => {
-  const { addTask } = useTodoList();
+  const { addTask } = useTodolistStore();
   const [error, setError] = useState('');
 
   const [newTaskDetails, setNewTaskDetails] = useState<NewTask>({

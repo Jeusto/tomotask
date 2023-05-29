@@ -1,4 +1,4 @@
-import { useTodoList } from '@/stores/todolistStore';
+import { useTodolistStore } from '@/stores/todolistStore';
 
 import { useState } from 'react';
 import { SpeedDial } from '@rneui/themed';
@@ -15,7 +15,7 @@ export const FloatingActionButton = ({
   showAddDialog,
   navigateToSettings,
 }: Props) => {
-  const { deleteAllTasks, deleteCheckedTasks } = useTodoList();
+  const { deleteAllTasks, deleteCheckedTasks } = useTodolistStore();
 
   const [open, setOpen] = useState(false);
   const toggleOpen = () => {

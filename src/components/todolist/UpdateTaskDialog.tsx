@@ -1,4 +1,4 @@
-import { useTodoList } from '@/stores/todolistStore';
+import { useTodolistStore } from '@/stores/todolistStore';
 import { NewTask } from '@/models';
 
 import Feather from 'react-native-vector-icons/Feather';
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const UpdateTaskDialog = ({ hideDialog, dialogVisible }: Props) => {
-  const { updateTask, deleteTask, tasks } = useTodoList();
+  const { updateTask, deleteTask, tasks } = useTodolistStore();
   const task = tasks.find((t) => t.id === dialogVisible.taskId);
 
   const [newTaskDetails, setNewTaskDetails] = useState<NewTask>({
