@@ -1,5 +1,5 @@
 import type { TimerMode } from '@/models';
-import { modeColors } from '@/utils/theme';
+import { modeColors } from '@/style/theme';
 import { useSound } from '@/hooks/useSound';
 
 import Feather from '@expo/vector-icons/Feather';

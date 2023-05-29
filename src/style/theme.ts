@@ -40,3 +40,10 @@ export const theme = {
   fontSize,
   radius,
 };
+
+// TODO: Replace usage of this with theme.color
+export const modeColors = {
+  Focus: '#ba4949',
+  'Short Break': '#38858a',
+  'Long Break': '#397097',
+};

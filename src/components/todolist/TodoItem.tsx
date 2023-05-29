@@ -1,5 +1,5 @@
 import type { SingleTask } from '@/models';
-import { Group } from '@/components/layout/Group';
+import { Group } from '@/components/layout';
 import { useSound } from '@/hooks/useSound';
 
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';

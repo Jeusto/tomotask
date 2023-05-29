@@ -1,7 +1,7 @@
 import type { TimerMode } from '@/models';
+import { Group } from '@/components/layout';
 
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Group } from '@/components/layout/Group';
 
 type Props = {
   timerMode: TimerMode;

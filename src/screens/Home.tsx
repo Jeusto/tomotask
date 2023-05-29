@@ -1,5 +1,4 @@
-import { ColorfulView } from '@/components/layout/ColorfulView';
-import { Stack } from '@/components/layout/Stack';
+import { ColorfulView, Stack } from '@/components/layout';
 import { TimerDisplay } from '@/components/pomodoro/TimerDisplay';
 import { TimerModeSelection } from '@/components/pomodoro/TimerModeSelection';
 import { TimerActionSection } from '@/components/pomodoro/TimerActionSection';
