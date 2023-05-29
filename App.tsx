@@ -1,5 +1,5 @@
-import { Home } from './screens/Home';
-import { Settings } from './screens/Settings';
+import { Home } from '@/screens/Home';
+import { Settings } from '@/screens/Settings';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

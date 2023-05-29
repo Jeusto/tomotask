@@ -1,7 +1,7 @@
-import type { TimerMode } from '../utils/types';
-import { useSound } from './useSound';
-import { useNotification } from './useNotification';
-import { useTodoList } from '../stores/todolistStore';
+import type { TimerMode } from '@/utils/types';
+import { useSound } from '@/hooks/useSound';
+import { useNotification } from '@/hooks/useNotification';
+import { useTodoList } from '@/stores/todolistStore';
 
 import { useState, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
@@ -34,7 +34,7 @@ const TIMER_MODES: Record<
   },
 };
 
-const alarmSoundFile = require('../assets/audio/alarm-kitchen.mp3');
+const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 
 export const useTimer = () => {
   const { playSound, stopSound } = useSound(alarmSoundFile);

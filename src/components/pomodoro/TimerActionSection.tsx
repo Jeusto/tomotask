@@ -1,11 +1,11 @@
-import type { TimerMode } from '../../utils/types';
-import { modeColors } from '../../utils/theme';
-import { useSound } from '../../hooks/useSound';
+import type { TimerMode } from '@/utils/types';
+import { modeColors } from '@/utils/theme';
+import { useSound } from '@/hooks/useSound';
 
 import Feather from '@expo/vector-icons/Feather';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
-const buttonSoundFile = require('../../assets/audio/button-press.wav');
+const buttonSoundFile = require('@/../assets/audio/button-press.wav');
 
 type Props = {
   isTimerRunning: boolean;

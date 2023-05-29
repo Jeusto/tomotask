@@ -1,5 +1,5 @@
-import { Group } from '../layout/Group';
-import { Center } from '../layout/Center';
+import { Group } from '@/components/layout/Group';
+import { Center } from '@/components/layout/Center';
 
 import Feather from '@expo/vector-icons/Feather';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';

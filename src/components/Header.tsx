@@ -1,4 +1,5 @@
-import { Group } from './layout/Group';
+import { Group } from '@/components/layout/Group';
+
 import { Image, Text, StyleSheet } from 'react-native';
 
 export const Header = () => {
@@ -6,7 +7,7 @@ export const Header = () => {
     <Group spacing="xs">
       <Image
         style={styles.logo}
-        source={require('../assets/tomotask-icon.png')}
+        source={require('@/../assets/tomotask-icon.png')}
       />
       <Text style={styles.title}>Tomotask</Text>
     </Group>

@@ -1,4 +1,4 @@
-import { Group } from '../layout/Group';
+import { Group } from '@/components/layout/Group';
 
 import { Text, StyleSheet } from 'react-native';
 

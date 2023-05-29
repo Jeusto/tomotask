@@ -1,6 +1,6 @@
-import type { SingleTask } from '../../utils/types';
-import { Group } from '../layout/Group';
-import { useSound } from '../../hooks/useSound';
+import type { SingleTask } from '@/utils/types';
+import { Group } from '@/components/layout/Group';
+import { useSound } from '@/hooks/useSound';
 
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Checkbox from 'expo-checkbox';
@@ -11,7 +11,7 @@ interface Props extends SingleTask {
   showUpdateDialog: (taskId: number) => void;
 }
 
-const checkAudioFile = require('../../assets/audio/check.mp3');
+const checkAudioFile = require('@/../assets/audio/check.mp3');
 
 export const TodoItem = ({
   id,

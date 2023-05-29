@@ -1,4 +1,4 @@
-import { getSpacing } from '../../utils/theme';
+import { getSpacing } from '@/utils/theme';
 
 import React from 'react';
 import { View, StyleSheet, ViewProps } from 'react-native';

@@ -1,51 +1,44 @@
-import { useTodoList } from '../../stores/todolistStore';
-import { NewTask } from '../../utils/types';
+import { useTodoList } from '@/stores/todolistStore';
+import { NewTask } from '@/utils/types';
 
-import { StyleSheet, TextInput, Text } from 'react-native';
-import { Dialog } from '@rneui/themed';
-import { useState } from 'react';
+import Feather from 'react-native-vector-icons/Feather';
+import { StyleSheet, TextInput } from 'react-native';
+import { Dialog, Button } from '@rneui/themed';
+import { useEffect, useState } from 'react';
 
 interface Props {
-  dialogVisible: boolean;
   hideDialog: () => void;
+  dialogVisible: {
+    visible: boolean;
+    taskId: number;
+  };
 }
 
-export const AddTaskDialog = ({ dialogVisible, hideDialog }: Props) => {
-  const { addTask } = useTodoList();
-  const [error, setError] = useState('');
+export const UpdateTaskDialog = ({ hideDialog, dialogVisible }: Props) => {
+  const { updateTask, deleteTask, tasks } = useTodoList();
+  const task = tasks.find((t) => t.id === dialogVisible.taskId);
 
   const [newTaskDetails, setNewTaskDetails] = useState<NewTask>({
     title: '',
     note: '',
-    pomodoroEstimate: 0,
+    pomodoroEstimate: -1,
   });
-  const resetTaskDetails = () => {
-    setNewTaskDetails({ title: '', note: '', pomodoroEstimate: 0 });
-    setError('');
-  };
 
-  const validateTaskDetails = () => {
-    if (newTaskDetails.title === '') {
-      setError('Task title cannot be empty');
-      return false;
-    }
-    return true;
-  };
-
-  const addNewTask = () => {
-    if (validateTaskDetails()) {
-      addTask(newTaskDetails);
-      hideDialog();
-      resetTaskDetails();
-    }
-  };
+  useEffect(() => {
+    setNewTaskDetails({
+      title: task?.title || '',
+      note: task?.note || '',
+      pomodoroEstimate: task?.pomodoroEstimate || 0,
+    });
+  }, [task]);
 
   return (
-    <Dialog isVisible={dialogVisible} onBackdropPress={hideDialog}>
-      <Dialog.Title title="Add new task" />
+    <Dialog isVisible={dialogVisible.visible} onBackdropPress={hideDialog}>
+      <Dialog.Title title="Update task" />
       <TextInput
         placeholder="Task title"
         style={styles.input}
+        value={newTaskDetails.title}
         onChangeText={(value) => {
           setNewTaskDetails({ ...newTaskDetails, title: value });
         }}
@@ -53,6 +46,7 @@ export const AddTaskDialog = ({ dialogVisible, hideDialog }: Props) => {
       <TextInput
         placeholder="Details/notes"
         style={styles.input}
+        value={newTaskDetails.note}
         onChangeText={(value) => {
           setNewTaskDetails({ ...newTaskDetails, note: value });
         }}
@@ -61,16 +55,32 @@ export const AddTaskDialog = ({ dialogVisible, hideDialog }: Props) => {
         placeholder="Number of pomodoros to complete"
         style={styles.input}
         keyboardType="numeric"
+        value={newTaskDetails.pomodoroEstimate.toString()}
         onChangeText={(value) => {
           setNewTaskDetails({ ...newTaskDetails, pomodoroEstimate: +value });
         }}
       />
-      {error && <Text style={styles.errorMessage}>Error: {error}</Text>}
+      <Button
+        color="#e06c75"
+        onPress={() => {
+          deleteTask(dialogVisible.taskId);
+          hideDialog();
+        }}
+      >
+        <Feather
+          name="trash-2"
+          size={16}
+          color="white"
+          style={styles.trashIcon}
+        />
+        Delete task
+      </Button>
       <Dialog.Actions>
         <Dialog.Button
-          title="ADD"
+          title="UPDATE TASK"
           onPress={() => {
-            addNewTask();
+            updateTask(dialogVisible.taskId, newTaskDetails);
+            hideDialog();
           }}
         />
         <Dialog.Button title="CANCEL" onPress={hideDialog} />
@@ -91,6 +101,9 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: 'rgba(255, 255, 255, 0.5)',
   },
+  trashIcon: {
+    marginRight: 5,
+  },
   name: {
     fontSize: 15,
     fontWeight: '500',
@@ -103,11 +116,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0, 0, 0, 0.5)',
     padding: 5,
     paddingHorizontal: 10,
-    marginVertical: 5,
-  },
-  errorMessage: {
-    color: 'red',
-    fontSize: 12,
     marginVertical: 5,
   },
 });

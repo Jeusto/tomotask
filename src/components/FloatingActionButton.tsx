@@ -1,4 +1,4 @@
-import { useTodoList } from '../stores/todolistStore';
+import { useTodoList } from '@/stores/todolistStore';
 
 import { useState } from 'react';
 import { SpeedDial } from '@rneui/themed';
