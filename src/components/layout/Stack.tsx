@@ -1,4 +1,4 @@
-import { getSpacing } from '@/utils/theme';
+import { theme } from '@/style/theme';
 
 import React from 'react';
 import { View, StyleSheet, ViewProps } from 'react-native';
@@ -11,7 +11,7 @@ interface StackProps extends ViewProps {
     | 'flex-end'
     | 'space-between'
     | 'space-around';
-  spacing?: number | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  spacing?: number | keyof typeof theme.spacing;
   children: React.ReactNode;
 }
 
@@ -30,7 +30,8 @@ export const Stack = ({
       justifyContent: justify,
     },
     item: {
-      marginBottom: getSpacing(spacing),
+      marginBottom:
+        typeof spacing === 'number' ? spacing : theme.spacing[spacing],
     },
   });
 

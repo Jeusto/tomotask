@@ -1,4 +1,4 @@
-import { getSpacing } from '@/utils/theme';
+import { theme } from '@/style/theme';
 
 import React from 'react';
 import { View, StyleSheet, ViewProps } from 'react-native';
@@ -13,7 +13,7 @@ interface GroupProps extends ViewProps {
     | 'flex-end'
     | 'space-between'
     | 'space-around';
-  spacing?: number | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  spacing?: number | keyof typeof theme.spacing;
 }
 
 export const Group = ({
@@ -29,7 +29,7 @@ export const Group = ({
   const spacingStyle =
     typeof spacing === 'number'
       ? { marginHorizontal: spacing / 2 }
-      : { marginHorizontal: getSpacing(spacing) };
+      : { marginHorizontal: theme.spacing[spacing] };
 
   const customStyles = StyleSheet.create({
     group: {

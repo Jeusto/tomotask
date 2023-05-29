@@ -1,4 +1,4 @@
-import { TimerMode } from '@/utils/types';
+import { TimerMode } from '@/models';
 
 type ModeColors = {
   [key in TimerMode]: string;

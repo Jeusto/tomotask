@@ -1,3 +1,5 @@
+import { theme } from '@/style/theme';
+
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, ViewProps } from 'react-native';
@@ -13,13 +15,14 @@ export const ColorfulView = ({
   style,
 }: ColorfulViewProps) => {
   const backgroundColor = useState(new Animated.Value(0))[0];
-  const focusColor = '#ba4949';
-  const shortBreakColor = '#38858a';
-  const longBreakColor = '#397097';
 
   const interpolatedColor = backgroundColor.interpolate({
     inputRange: [0, 1, 2],
-    outputRange: [focusColor, shortBreakColor, longBreakColor],
+    outputRange: [
+      theme.color.focus,
+      theme.color.shortBreak,
+      theme.color.longBreak,
+    ],
   });
 
   useEffect(() => {
