@@ -1,8 +1,13 @@
+import { useAppSettingsStore } from '@/stores/settingsStore';
+
 import { useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
 
 export const useSound = (soundFile: any) => {
   const [soundState, setSoundState] = useState<Audio.Sound | null>(null);
+
+  const { settings } = useAppSettingsStore();
+  const alarmEnabled = settings.sound.alarmEnabled;
 
   useEffect(() => {
     return () => {
@@ -13,6 +18,10 @@ export const useSound = (soundFile: any) => {
   }, [soundState]);
 
   async function playSound() {
+    if (!alarmEnabled) {
+      return;
+    }
+
     const { sound } = await Audio.Sound.createAsync(soundFile);
     setSoundState(sound);
     await sound?.playAsync();
