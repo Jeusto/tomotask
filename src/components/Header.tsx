@@ -1,5 +1,4 @@
 import { Group } from '@/components/layout';
-
 import { Image, Text, StyleSheet } from 'react-native';
 
 export const Header = () => {
