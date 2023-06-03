@@ -18,6 +18,7 @@ export const useAppSettingsStore = create(
           shortBreakDuration: 5,
           longBreakDuration: 15,
           longBreakInterval: 4,
+          autoStartNextRound: true,
         },
         todolist: {
           showCompleted: true,

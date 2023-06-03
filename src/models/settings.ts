@@ -4,6 +4,7 @@ export type AppSettings = {
     shortBreakDuration: number;
     longBreakDuration: number;
     longBreakInterval: number;
+    autoStartNextRound: boolean;
   };
   todolist: {
     showCompleted: boolean;

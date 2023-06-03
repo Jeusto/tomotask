@@ -5,6 +5,7 @@ import { useTodolistStore } from '@/stores/todolistStore';
 
 import { useState, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
+import { useAppSettingsStore } from '@/stores/settingsStore';
 
 interface TimerState {
   countdown: number;
@@ -12,39 +13,40 @@ interface TimerState {
   isRunning: boolean;
 }
 
-const FOCUS_TIME_MINUTES = 25 * 60 * 1000;
-const BREAK_TIME_MINUTES = 5 * 60 * 1000;
-const LONG_BREAK_TIME_MINUTES = 15 * 60 * 1000;
-
-const TIMER_MODES: Record<
-  TimerMode,
-  { duration: number; nextMode: TimerMode }
-> = {
-  Focus: {
-    duration: FOCUS_TIME_MINUTES,
-    nextMode: 'Short Break',
-  },
-  'Short Break': {
-    duration: BREAK_TIME_MINUTES,
-    nextMode: 'Long Break',
-  },
-  'Long Break': {
-    duration: LONG_BREAK_TIME_MINUTES,
-    nextMode: 'Focus',
-  },
-};
-
 const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 
 export const useTimer = () => {
   const { playSound, stopSound } = useSound(alarmSoundFile);
   const { scheduleNotification, cancelNotification } = useNotification();
   const { incrementPomodoroCount } = useTodolistStore();
+  const { settings } = useAppSettingsStore();
+
+  const FOCUS_TIME = settings.pomodoro.focusDuration * 60 * 1000;
+  const BREAK_TIME = settings.pomodoro.shortBreakDuration * 60 * 1000;
+  const LONG_BREAK_TIME = settings.pomodoro.longBreakDuration * 60 * 1000;
+  const TIMER_MODES: Record<
+    TimerMode,
+    { duration: number; nextMode: TimerMode }
+  > = {
+    Focus: {
+      duration: FOCUS_TIME,
+      nextMode: 'Short Break',
+    },
+    'Short Break': {
+      duration: BREAK_TIME,
+      nextMode: 'Focus',
+    },
+    'Long Break': {
+      duration: LONG_BREAK_TIME,
+      nextMode: 'Focus',
+    },
+  };
 
   const leaveAppTimestamp = useRef<number | null>(null);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const [currentPomodoroCount, setCurrentPomodoroCount] = useState<number>(0);
   const [timerState, setTimerState] = useState<TimerState>({
-    countdown: FOCUS_TIME_MINUTES,
+    countdown: FOCUS_TIME,
     mode: 'Focus',
     isRunning: false,
   });
@@ -140,8 +142,18 @@ export const useTimer = () => {
 
   const setNextTimerMode = () => {
     const currentMode = TIMER_MODES[timerState.mode];
-    if (timerState.mode === 'Focus') incrementPomodoroCount();
-    setTimerMode(currentMode.nextMode);
+    if (timerState.mode === 'Focus') {
+      incrementPomodoroCount();
+      setCurrentPomodoroCount(currentPomodoroCount + 1);
+    }
+
+    if (currentPomodoroCount === settings.pomodoro.longBreakInterval) {
+      setTimerMode('Long Break');
+      setCurrentPomodoroCount(0);
+      return;
+    } else {
+      setTimerMode(currentMode.nextMode);
+    }
   };
 
   const setTimerMode = (mode: TimerMode) => {
