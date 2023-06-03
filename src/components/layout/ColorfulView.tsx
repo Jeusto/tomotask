@@ -1,17 +1,21 @@
+import { TimerMode } from '@/models';
 import { theme } from '@/style/theme';
 
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, ViewProps } from 'react-native';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 interface ColorfulViewProps extends ViewProps {
-  timerMode: string;
+  mode: TimerMode;
+  setTimerMode: (mode: TimerMode) => void;
   children: React.ReactNode;
 }
 
 export const ColorfulView = ({
+  mode,
+  setTimerMode,
   children,
-  timerMode,
   style,
 }: ColorfulViewProps) => {
   const backgroundColor = useState(new Animated.Value(0))[0];
@@ -27,24 +31,42 @@ export const ColorfulView = ({
 
   useEffect(() => {
     Animated.timing(backgroundColor, {
-      toValue: timerMode === 'Focus' ? 0 : timerMode === 'Short Break' ? 1 : 2,
+      toValue: mode === 'Focus' ? 0 : mode === 'Short Break' ? 1 : 2,
       duration: 500,
       useNativeDriver: false,
     }).start();
-  }, [timerMode, backgroundColor]);
+  }, [mode, backgroundColor]);
 
   const dynamicStyles = StyleSheet.create({
     container: {
       backgroundColor: interpolatedColor as any,
+      paddingTop: 250,
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
     },
   });
 
+  const handleGestureEvent = (event: any) => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      if (event.nativeEvent.translationX > 100) {
+        setTimerMode('Focus');
+      } else if (event.nativeEvent.translationX < -100) {
+        setTimerMode('Long Break');
+      } else if (
+        event.nativeEvent.translationX > -100 &&
+        event.nativeEvent.translationX < 100
+      ) {
+        setTimerMode('Short Break');
+      }
+    }
+  };
+
   return (
-    <Animated.View style={[dynamicStyles.container, style]}>
-      {children}
-    </Animated.View>
+    <PanGestureHandler onGestureEvent={handleGestureEvent}>
+      <Animated.View style={[dynamicStyles.container, style]}>
+        {children}
+      </Animated.View>
+    </PanGestureHandler>
   );
 };

@@ -14,6 +14,7 @@ import { useTimer } from '@/hooks/useTimer';
 import type { RootStackParamList } from '../../App';
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ScrollView, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
@@ -49,58 +50,60 @@ export function Home({ navigation }: HomeViewProps) {
   };
 
   return (
-    <ColorfulView timerMode={mode} style={styles.background}>
-      <StatusBar style="auto" />
-      <Stack>
-        <Header />
-        <Stack spacing="xs" style={styles.pomodoroSection}>
-          <TimerModeSelection timerMode={mode} setTimerMode={setTimerMode} />
-          <TimerDisplay countdown={countdown} />
-          <TimerActionSection
-            isTimerRunning={isRunning}
-            timerMode={mode}
-            toggleTimer={toggleTimer}
-            setNextTimerMode={setNextTimerMode}
-          />
+    <GestureHandlerRootView style={styles.rootView}>
+      <StatusBar />
+      <ColorfulView mode={mode} setTimerMode={setTimerMode}>
+        <Stack>
+          <Header />
+          <Stack spacing="xs" style={styles.pomodoroSection}>
+            <TimerModeSelection timerMode={mode} setTimerMode={setTimerMode} />
+            <TimerDisplay countdown={countdown} />
+            <TimerActionSection
+              isTimerRunning={isRunning}
+              timerMode={mode}
+              toggleTimer={toggleTimer}
+              setNextTimerMode={setNextTimerMode}
+            />
+          </Stack>
+          <Stack spacing="xs">
+            <TodoHeader
+              completedTaskCount={tasks.filter((t) => t.checked).length}
+              totalTaskCount={tasks.length}
+            />
+            <ScrollView>
+              {tasks.map((task) => (
+                <TodoItem
+                  key={task.id}
+                  check={checkTask}
+                  select={selectTask}
+                  showUpdateDialog={showUpdateDialog}
+                  {...task}
+                />
+              ))}
+              <AddTaskButton showAddDialog={showAddDialog} />
+            </ScrollView>
+          </Stack>
         </Stack>
-        <Stack spacing="xs">
-          <TodoHeader
-            completedTaskCount={tasks.filter((t) => t.checked).length}
-            totalTaskCount={tasks.length}
-          />
-          <ScrollView>
-            {tasks.map((task) => (
-              <TodoItem
-                key={task.id}
-                check={checkTask}
-                select={selectTask}
-                showUpdateDialog={showUpdateDialog}
-                {...task}
-              />
-            ))}
-            <AddTaskButton showAddDialog={showAddDialog} />
-          </ScrollView>
-        </Stack>
-      </Stack>
-      <FloatingActionButton
-        showAddDialog={showAddDialog}
-        navigateToSettings={() => navigation.navigate('Settings')}
-      />
-      <AddTaskDialog
-        dialogVisible={addDialogVisible}
-        hideDialog={hideAddDialog}
-      />
-      <UpdateTaskDialog
-        dialogVisible={updateDialogVisible}
-        hideDialog={hideUpdateDialog}
-      />
-    </ColorfulView>
+        <FloatingActionButton
+          showAddDialog={showAddDialog}
+          navigateToSettings={() => navigation.navigate('Settings')}
+        />
+        <AddTaskDialog
+          dialogVisible={addDialogVisible}
+          hideDialog={hideAddDialog}
+        />
+        <UpdateTaskDialog
+          dialogVisible={updateDialogVisible}
+          hideDialog={hideUpdateDialog}
+        />
+      </ColorfulView>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    paddingTop: 250,
+  rootView: {
+    flex: 1,
   },
   container: {
     flex: 1,
