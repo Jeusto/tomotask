@@ -1,23 +1,24 @@
-import { ColorfulView, Stack } from '@/components/layout';
+import { FloatingActionButton } from '@/components/FloatingActionButton';
+import { Header } from '@/components/Header';
+import { Stack } from '@/components/layout';
+import { TimerActionSection } from '@/components/pomodoro/TimerActionSection';
 import { TimerDisplay } from '@/components/pomodoro/TimerDisplay';
 import { TimerModeSelection } from '@/components/pomodoro/TimerModeSelection';
-import { TimerActionSection } from '@/components/pomodoro/TimerActionSection';
+import { AddTaskButton } from '@/components/todolist/AddTaskButton';
+import { AddTaskDialog } from '@/components/todolist/AddTaskDialog';
 import { TodoHeader } from '@/components/todolist/TodoHeader';
 import { TodoItem } from '@/components/todolist/TodoItem';
-import { AddTaskDialog } from '@/components/todolist/AddTaskDialog';
-import { AddTaskButton } from '@/components/todolist/AddTaskButton';
-import { FloatingActionButton } from '@/components/FloatingActionButton';
 import { UpdateTaskDialog } from '@/components/todolist/UpdateTaskDialog';
-import { Header } from '@/components/Header';
+import { useTimer } from '@/hooks';
+import { useAppSettingsStore } from '@/stores/settingsStore';
 import { useTodolistStore } from '@/stores/todolistStore';
-import { useTimer } from '@/hooks/useTimer';
-import type { RootStackParamList } from '../../App';
-
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { ScrollView, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import type { RootStackParamList } from '../../App';
+import { ColorfulPanGestureView } from '@/components/ColorfulPanGestureView';
 
 interface HomeViewProps {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -25,6 +26,7 @@ interface HomeViewProps {
 
 export function Home({ navigation }: HomeViewProps) {
   const { tasks, checkTask, selectTask } = useTodolistStore();
+  const { settings } = useAppSettingsStore();
   const {
     countdown,
     mode,
@@ -52,7 +54,7 @@ export function Home({ navigation }: HomeViewProps) {
   return (
     <GestureHandlerRootView style={styles.rootView}>
       <StatusBar />
-      <ColorfulView mode={mode} setTimerMode={setTimerMode}>
+      <ColorfulPanGestureView mode={mode} onGesture={setNextTimerMode}>
         <Stack>
           <Header />
           <Stack spacing="xs" style={styles.pomodoroSection}>
@@ -71,15 +73,19 @@ export function Home({ navigation }: HomeViewProps) {
               totalTaskCount={tasks.length}
             />
             <ScrollView>
-              {tasks.map((task) => (
-                <TodoItem
-                  key={task.id}
-                  check={checkTask}
-                  select={selectTask}
-                  showUpdateDialog={showUpdateDialog}
-                  {...task}
-                />
-              ))}
+              {tasks
+                .filter((t) =>
+                  settings.todolist.showCompleted ? true : !t.checked,
+                )
+                .map((task) => (
+                  <TodoItem
+                    key={task.id}
+                    check={checkTask}
+                    select={selectTask}
+                    showUpdateDialog={showUpdateDialog}
+                    {...task}
+                  />
+                ))}
               <AddTaskButton showAddDialog={showAddDialog} />
             </ScrollView>
           </Stack>
@@ -96,7 +102,7 @@ export function Home({ navigation }: HomeViewProps) {
           dialogVisible={updateDialogVisible}
           hideDialog={hideUpdateDialog}
         />
-      </ColorfulView>
+      </ColorfulPanGestureView>
     </GestureHandlerRootView>
   );
 }
