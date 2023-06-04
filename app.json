@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false
     },
@@ -28,8 +30,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "43b5f251-e878-444a-96e3-8cd95989209f"
+        "projectId": "f362877e-6788-4092-a148-75fbc9af4f74"
       }
-    }
+    },
+    "owner": "jeusto"
   }
 }
