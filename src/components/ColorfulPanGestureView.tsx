@@ -1,13 +1,6 @@
+import { useAnimatedModeColor } from '@/hooks';
 import { TimerMode } from '@/models';
-import { theme } from '@/style/theme';
-import React, { useEffect, useState } from 'react';
-import {
-  Animated,
-  Easing,
-  StyleProp,
-  StyleSheet,
-  ViewProps,
-} from 'react-native';
+import { Animated, StyleProp, StyleSheet, ViewProps } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
 const SWIPE_LEFT_THRESHOLD = -40;
@@ -34,38 +27,9 @@ export const ColorfulPanGestureView = ({
     }
   };
 
-  const backgroundColor = useState(new Animated.Value(0))[0];
-
-  const interpolatedColor = backgroundColor.interpolate({
-    inputRange: [0, 1, 2],
-    outputRange: [
-      theme.color.shortBreak,
-      theme.color.focus,
-      theme.color.longBreak,
-    ],
-  });
-
-  useEffect(() => {
-    let toValue = 1;
-
-    if (mode === 'Short Break') {
-      toValue = 0;
-    } else if (mode === 'Long Break') {
-      toValue = 2;
-    }
-
-    Animated.timing(backgroundColor, {
-      toValue,
-      duration: 500,
-      useNativeDriver: false,
-      easing: Easing.linear,
-    }).start();
-  }, [mode]);
-
+  const interpolatedColor = useAnimatedModeColor(mode);
   const dynamicStyles = StyleSheet.create({
-    container: {
-      backgroundColor: interpolatedColor as any,
-    },
+    container: { backgroundColor: interpolatedColor as any },
   });
 
   return (
