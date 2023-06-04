@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import * as Notifications from 'expo-notifications';
+import { useEffect, useState } from 'react';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -9,6 +9,9 @@ Notifications.setNotificationHandler({
   }),
 });
 
+/**
+ * Custom hook to handle local notifications
+ */
 export const useNotification = () => {
   const [_expoPushToken, setExpoPushToken] = useState('');
 

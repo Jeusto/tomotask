@@ -4,11 +4,13 @@ import { useSound } from '@/hooks/useSound';
 import type { TimerMode, TimerState } from '@/models';
 import { useAppSettingsStore } from '@/stores/settingsStore';
 import { useTodolistStore } from '@/stores/todolistStore';
-
 import { useRef, useState } from 'react';
 
 const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 
+/**
+ * Custom hook to handle the timer state
+ */
 export const useTimer = () => {
   const { playSound, stopSound } = useSound(alarmSoundFile);
   const { scheduleNotification, cancelNotification } = useNotification();
@@ -53,6 +55,9 @@ export const useTimer = () => {
     },
   });
 
+  /**
+   * Remove the elapsed time from the timer countdown
+   */
   const removeElapsedTimeFromTimer = () => {
     if (leaveAppTimestamp.current && timerState.isRunning) {
       const currentTimestamp = Date.now();
@@ -70,6 +75,9 @@ export const useTimer = () => {
     }
   };
 
+  /**
+   * Start the countdown and set the timer interval
+   */
   const startCountdown = () => {
     const id = setInterval(
       () =>
@@ -89,11 +97,17 @@ export const useTimer = () => {
     );
   };
 
+  /**
+   * Stop the countdown and clear the timer interval
+   */
   const stopCountdown = () => {
     if (intervalId) clearInterval(intervalId);
     cancelNotification();
   };
 
+  /**
+   * Toggle the timer between running and stopped depending on the current state
+   */
   const toggleTimer = () => {
     timerState.isRunning ? stopCountdown() : startCountdown();
 
@@ -104,6 +118,10 @@ export const useTimer = () => {
     });
   };
 
+  /**
+   * Set the next timer mode based on the current mode
+   * and the current pomodoro count
+   */
   const setNextTimerMode = () => {
     const currentMode = TIMER_MODES[timerState.mode];
     const newPomodoroCount = currentPomodoroCount + 1;
@@ -124,6 +142,10 @@ export const useTimer = () => {
     }
   };
 
+  /**
+   * Set the timer mode and reset the countdown
+   * @param mode The timer mode to set
+   */
   const setTimerMode = (mode: TimerMode) => {
     setTimerState({
       ...timerState,

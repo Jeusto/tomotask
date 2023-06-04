@@ -1,5 +1,4 @@
-import { SingleTask, NewTask } from '@/models';
-
+import { NewTask, SingleTask } from '@/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -16,10 +15,14 @@ export interface TodoListState {
   incrementPomodoroCount: () => void;
 }
 
+/**
+ * Zustand store to handle todo list tasks
+ */
 export const useTodolistStore = create(
   persist<TodoListState>(
     (set) => ({
       tasks: [],
+
       addTask: (newTaskDetails) => {
         set((state) => ({
           tasks: [
@@ -36,11 +39,13 @@ export const useTodolistStore = create(
           ],
         }));
       },
+
       deleteTask: (id) => {
         set((state) => ({
           tasks: state.tasks.filter((todo) => todo.id !== id),
         }));
       },
+
       updateTask: (id, newTaskDetails) => {
         set((state) => ({
           tasks: state.tasks.map((todo) => {
@@ -56,6 +61,7 @@ export const useTodolistStore = create(
           }),
         }));
       },
+
       checkTask: (id) => {
         set((state) => ({
           tasks: state.tasks.map((todo) => {
@@ -66,6 +72,7 @@ export const useTodolistStore = create(
           }),
         }));
       },
+
       selectTask: (id) => {
         set((state) => ({
           tasks: state.tasks.map((todo) => {
@@ -76,14 +83,17 @@ export const useTodolistStore = create(
           }),
         }));
       },
+
       deleteCheckedTasks: () => {
         set((state) => ({
           tasks: state.tasks.filter((todo) => !todo.checked),
         }));
       },
+
       deleteAllTasks: () => {
         set({ tasks: [] });
       },
+
       incrementPomodoroCount: () => {
         set((state) => ({
           tasks: state.tasks.map((todo) => {
@@ -95,6 +105,7 @@ export const useTodolistStore = create(
         }));
       },
     }),
+
     {
       name: 'todo-list-storage',
       storage: createJSONStorage(() => AsyncStorage),

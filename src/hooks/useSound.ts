@@ -1,8 +1,12 @@
 import { useAppSettingsStore } from '@/stores/settingsStore';
-
-import { useEffect, useState } from 'react';
 import { Audio } from 'expo-av';
+import { useEffect, useState } from 'react';
 
+/**
+ * Custom hook to play a sound
+ * @param soundFile The sound file to be played
+ * @returns playSound and stopSound functions
+ */
 export const useSound = (soundFile: any) => {
   const [soundState, setSoundState] = useState<Audio.Sound | null>(null);
 

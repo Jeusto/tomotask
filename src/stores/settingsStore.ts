@@ -1,5 +1,4 @@
 import { AppSettings } from '@/models';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
@@ -9,6 +8,9 @@ export interface AppSettingsState {
   setSettings: (newSettings: AppSettings) => void;
 }
 
+/**
+ * Zustand store to handle app settings
+ */
 export const useAppSettingsStore = create(
   persist<AppSettingsState>(
     (set) => ({
@@ -31,12 +33,14 @@ export const useAppSettingsStore = create(
           enabled: true,
         },
       },
+
       setSettings: (newSettings) => {
         set(() => ({
           settings: newSettings,
         }));
       },
     }),
+
     {
       name: 'app-settings-storage',
       storage: createJSONStorage(() => AsyncStorage),

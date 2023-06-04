@@ -1,8 +1,7 @@
 export type TimerMode = 'Focus' | 'Short Break' | 'Long Break';
 
-export enum TimerStatus {
-  Running = 'running',
-  Paused = 'paused',
-  Stopped = 'stopped',
-  Completed = 'completed',
+export interface TimerState {
+  countdown: number;
+  mode: TimerMode;
+  isRunning: boolean;
 }
