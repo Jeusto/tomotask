@@ -91,10 +91,12 @@ export function TimerContextProvider({ children }: { children: ReactNode }) {
   useAppStateChange({
     onChangeFromActiveToBackground: () => {
       leaveAppTimestamp.current = Date.now();
-      scheduleNotification(
-        `Time for the next mode: "${TIMER_MODES[timerState.mode].nextMode}"`,
-        timerState.countdown / 1000,
-      );
+      if (timerState.isRunning) {
+        scheduleNotification(
+          `Time's up! Next mode: "${TIMER_MODES[timerState.mode].nextMode}"`,
+          timerState.countdown / 1000,
+        );
+      }
     },
     onChangeFromBackgroundToActive: () => {
       cancelNotification();
