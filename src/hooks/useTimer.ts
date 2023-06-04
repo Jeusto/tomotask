@@ -1,11 +1,11 @@
-import type { TimerMode, TimerState } from '@/models';
-import { useSound } from '@/hooks/useSound';
+import { useAppStateChange } from '@/hooks/useAppStateChange';
 import { useNotification } from '@/hooks/useNotification';
+import { useSound } from '@/hooks/useSound';
+import type { TimerMode, TimerState } from '@/models';
+import { useAppSettingsStore } from '@/stores/settingsStore';
 import { useTodolistStore } from '@/stores/todolistStore';
 
-import { useState, useEffect, useRef } from 'react';
-import { AppState } from 'react-native';
-import { useAppSettingsStore } from '@/stores/settingsStore';
+import { useRef, useState } from 'react';
 
 const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 
@@ -42,32 +42,18 @@ export const useTimer = () => {
     isRunning: false,
   });
 
-  useEffect(() => {
-    // Use the AppState to detect when the app goes in the background so that when it
-    // comes back to the foreground, we can calculate how much time has passed and
-    // update the countdown accordingly
-    const subscription = AppState.addEventListener(
-      'change',
-      (nextAppState: string) => {
-        if (nextAppState === 'background') {
-          leaveAppTimestamp.current = Date.now();
-        } else if (nextAppState === 'active') {
-          calculateElapsedTime();
-        }
-      },
-    );
+  // If the app goes into the background, save the timestamp so that we can
+  // calculate how much time has passed when the app comes back to the foreground
+  useAppStateChange({
+    onChangeFromActiveToBackground: () => {
+      leaveAppTimestamp.current = Date.now();
+    },
+    onChangeFromBackgroundToActive: () => {
+      removeElapsedTimeFromTimer();
+    },
+  });
 
-    if (timerState.countdown <= 0) {
-      playSound();
-      setNextTimerMode();
-    }
-
-    return () => {
-      subscription.remove();
-    };
-  }, [timerState.countdown]);
-
-  const calculateElapsedTime = () => {
+  const removeElapsedTimeFromTimer = () => {
     if (leaveAppTimestamp.current && timerState.isRunning) {
       const currentTimestamp = Date.now();
       const elapsedMilliseconds = currentTimestamp - leaveAppTimestamp.current;
