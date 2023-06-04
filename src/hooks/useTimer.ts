@@ -4,7 +4,7 @@ import { useSound } from '@/hooks';
 import type { TimerMode, TimerState } from '@/models';
 import { useAppSettingsStore } from '@/stores/settingsStore';
 import { useTodolistStore } from '@/stores/todolistStore';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 
@@ -43,6 +43,22 @@ export const useTimer = () => {
     mode: 'Focus',
     isRunning: false,
   });
+
+  // Start or stop the timer when the isRunning state changes
+  useEffect(() => {
+    if (timerState.isRunning) {
+      startCountdown();
+    } else {
+      stopCountdown();
+    }
+  }, [timerState.isRunning]);
+
+  // When the countdown reaches 0, set the next timer mode
+  useEffect(() => {
+    if (timerState.countdown <= 0) {
+      setNextTimerMode();
+    }
+  }, [timerState.countdown]);
 
   // If the app goes into the background, save the timestamp so that we can
   // calculate how much time has passed when the app comes back to the foreground
@@ -109,9 +125,6 @@ export const useTimer = () => {
    * Toggle the timer between running and stopped depending on the current state
    */
   const toggleTimer = () => {
-    timerState.isRunning ? stopCountdown() : startCountdown();
-
-    stopSound();
     setTimerState({
       ...timerState,
       isRunning: !timerState.isRunning,
@@ -125,6 +138,11 @@ export const useTimer = () => {
   const setNextTimerMode = () => {
     const currentMode = TIMER_MODES[timerState.mode];
     const newPomodoroCount = currentPomodoroCount + 1;
+
+    if (timerState.isRunning) {
+      stopSound();
+      playSound();
+    }
 
     if (timerState.mode === 'Focus') {
       incrementPomodoroCount();
@@ -153,13 +171,6 @@ export const useTimer = () => {
       countdown: TIMER_MODES[mode].duration,
       isRunning: settings.pomodoro.autoStartNextRound,
     });
-
-    if (!settings.pomodoro.autoStartNextRound) {
-      stopCountdown();
-      startCountdown();
-    }
-
-    cancelNotification();
   };
 
   return {
