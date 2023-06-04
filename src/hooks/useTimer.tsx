@@ -1,4 +1,4 @@
-import type { TimerMode } from '@/models';
+import type { TimerMode, TimerState } from '@/models';
 import { useSound } from '@/hooks/useSound';
 import { useNotification } from '@/hooks/useNotification';
 import { useTodolistStore } from '@/stores/todolistStore';
@@ -6,12 +6,6 @@ import { useTodolistStore } from '@/stores/todolistStore';
 import { useState, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 import { useAppSettingsStore } from '@/stores/settingsStore';
-
-interface TimerState {
-  countdown: number;
-  mode: TimerMode;
-  isRunning: boolean;
-}
 
 const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 
@@ -21,23 +15,20 @@ export const useTimer = () => {
   const { incrementPomodoroCount } = useTodolistStore();
   const { settings } = useAppSettingsStore();
 
-  const FOCUS_TIME = settings.pomodoro.focusDuration * 60 * 1000;
-  const BREAK_TIME = settings.pomodoro.shortBreakDuration * 60 * 1000;
-  const LONG_BREAK_TIME = settings.pomodoro.longBreakDuration * 60 * 1000;
   const TIMER_MODES: Record<
     TimerMode,
     { duration: number; nextMode: TimerMode }
   > = {
     Focus: {
-      duration: FOCUS_TIME,
+      duration: settings.pomodoro.focusDuration * 60 * 1000,
       nextMode: 'Short Break',
     },
     'Short Break': {
-      duration: BREAK_TIME,
+      duration: settings.pomodoro.shortBreakDuration * 60 * 1000,
       nextMode: 'Focus',
     },
     'Long Break': {
-      duration: LONG_BREAK_TIME,
+      duration: settings.pomodoro.longBreakDuration * 60 * 1000,
       nextMode: 'Focus',
     },
   };
@@ -46,7 +37,7 @@ export const useTimer = () => {
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [currentPomodoroCount, setCurrentPomodoroCount] = useState<number>(0);
   const [timerState, setTimerState] = useState<TimerState>({
-    countdown: FOCUS_TIME,
+    countdown: TIMER_MODES.Focus.duration,
     mode: 'Focus',
     isRunning: false,
   });
@@ -68,17 +59,7 @@ export const useTimer = () => {
 
     if (timerState.countdown <= 0) {
       playSound();
-      stopCountdown();
-
-      const currentMode = TIMER_MODES[timerState.mode];
-      const nextMode = currentMode.nextMode;
-
-      setTimerState({
-        ...timerState,
-        mode: nextMode,
-        countdown: TIMER_MODES[nextMode].duration,
-        isRunning: false,
-      });
+      setNextTimerMode();
     }
 
     return () => {
@@ -123,10 +104,7 @@ export const useTimer = () => {
   };
 
   const stopCountdown = () => {
-    if (intervalId) {
-      clearInterval(intervalId);
-    }
-    setIntervalId(null);
+    if (intervalId) clearInterval(intervalId);
     cancelNotification();
   };
 
@@ -142,31 +120,37 @@ export const useTimer = () => {
 
   const setNextTimerMode = () => {
     const currentMode = TIMER_MODES[timerState.mode];
+    const newPomodoroCount = currentPomodoroCount + 1;
+
     if (timerState.mode === 'Focus') {
       incrementPomodoroCount();
       setCurrentPomodoroCount(currentPomodoroCount + 1);
     }
 
-    if (currentPomodoroCount === settings.pomodoro.longBreakInterval) {
+    if (
+      timerState.mode === 'Focus' &&
+      newPomodoroCount === settings.pomodoro.longBreakInterval
+    ) {
       setTimerMode('Long Break');
       setCurrentPomodoroCount(0);
-      return;
     } else {
       setTimerMode(currentMode.nextMode);
     }
   };
 
   const setTimerMode = (mode: TimerMode) => {
-    const newMode = TIMER_MODES[mode];
-
     setTimerState({
       ...timerState,
       mode,
-      countdown: newMode.duration,
-      isRunning: false,
+      countdown: TIMER_MODES[mode].duration,
+      isRunning: settings.pomodoro.autoStartNextRound,
     });
 
-    stopCountdown();
+    if (!settings.pomodoro.autoStartNextRound) {
+      stopCountdown();
+      startCountdown();
+    }
+
     cancelNotification();
   };
 

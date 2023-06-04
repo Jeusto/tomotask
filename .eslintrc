@@ -3,7 +3,8 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "no-unused-vars": "warn"
   },
   "globals": {
     "NodeJS": "readonly",
