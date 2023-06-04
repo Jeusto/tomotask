@@ -21,16 +21,10 @@ export const useNotification = () => {
     );
   }, []);
 
-  const scheduleNotification = async (
-    title: string,
-    body: string,
-    delay: number | null,
-  ) => {
+  const scheduleNotification = async (title: string, delay: number | null) => {
     await Notifications.scheduleNotificationAsync({
       content: {
         title,
-        body,
-        data: { data: '' },
       },
       trigger: delay ? { seconds: delay } : null,
     });

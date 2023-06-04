@@ -56,6 +56,8 @@ export const useTimer = () => {
   // When the countdown reaches 0, set the next timer mode
   useEffect(() => {
     if (timerState.countdown <= 0) {
+      stopSound();
+      playSound();
       setNextTimerMode();
     }
   }, [timerState.countdown]);
@@ -65,8 +67,13 @@ export const useTimer = () => {
   useAppStateChange({
     onChangeFromActiveToBackground: () => {
       leaveAppTimestamp.current = Date.now();
+      scheduleNotification(
+        `Time for the next mode: "${TIMER_MODES[timerState.mode].nextMode}"`,
+        timerState.countdown / 1000,
+      );
     },
     onChangeFromBackgroundToActive: () => {
+      cancelNotification();
       removeElapsedTimeFromTimer();
     },
   });
@@ -106,11 +113,6 @@ export const useTimer = () => {
 
     setTimerState({ ...timerState, isRunning: true });
     setIntervalId(id);
-    scheduleNotification(
-      `Time's up!`,
-      `Time for the next mode: "${TIMER_MODES[timerState.mode].nextMode}"`,
-      timerState.countdown / 1000,
-    );
   };
 
   /**
@@ -138,11 +140,6 @@ export const useTimer = () => {
   const setNextTimerMode = () => {
     const currentMode = TIMER_MODES[timerState.mode];
     const newPomodoroCount = currentPomodoroCount + 1;
-
-    if (timerState.isRunning) {
-      stopSound();
-      playSound();
-    }
 
     if (timerState.mode === 'Focus') {
       incrementPomodoroCount();
