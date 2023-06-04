@@ -1,17 +1,41 @@
-import { useAppStateChange } from '@/hooks';
-import { useNotification } from '@/hooks';
-import { useSound } from '@/hooks';
+import { useAppStateChange, useNotification, useSound } from '@/hooks';
 import type { TimerMode, TimerState } from '@/models';
 import { useAppSettingsStore } from '@/stores/settingsStore';
 import { useTodolistStore } from '@/stores/todolistStore';
-import { useRef, useState, useEffect } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 const alarmSoundFile = require('@/../assets/audio/alarm-kitchen.mp3');
 
-/**
- * Custom hook to handle the timer state
- */
-export const useTimer = () => {
+interface TimerContextType {
+  countdown: number;
+  mode: TimerMode;
+  isRunning: boolean;
+  toggleTimer: () => void;
+  setNextTimerMode: () => void;
+  setTimerMode: (mode: TimerMode) => void;
+}
+
+export const TimerContext = createContext<TimerContextType>({
+  countdown: 0,
+  mode: 'Focus',
+  isRunning: false,
+  toggleTimer: () => {},
+  setNextTimerMode: () => {},
+  setTimerMode: () => {},
+});
+
+export function useTimer() {
+  return useContext(TimerContext);
+}
+
+export function TimerContextProvider({ children }: { children: ReactNode }) {
   const { playSound, stopSound } = useSound(alarmSoundFile);
   const { scheduleNotification, cancelNotification } = useNotification();
   const { incrementPomodoroCount } = useTodolistStore();
@@ -170,7 +194,7 @@ export const useTimer = () => {
     });
   };
 
-  return {
+  const contextValue: TimerContextType = {
     countdown: timerState.countdown,
     mode: timerState.mode,
     isRunning: timerState.isRunning,
@@ -178,4 +202,10 @@ export const useTimer = () => {
     setNextTimerMode,
     setTimerMode,
   };
-};
+
+  return (
+    <TimerContext.Provider value={contextValue}>
+      {children}
+    </TimerContext.Provider>
+  );
+}

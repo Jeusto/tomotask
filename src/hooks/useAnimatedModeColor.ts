@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 import { Animated, Easing } from 'react-native';
 import { TimerMode } from '@/models';
 import { theme } from '@/style/theme';
+import { useTimer } from './TimerContext';
 
 /**
  * Custom hook to handle color animation depending on the current mode
  * @param mode Current mode
  * @returns Animated color
  */
-export const useAnimatedModeColor = (mode: TimerMode) => {
+export const useAnimatedModeColor = (_mode: TimerMode) => {
   const [animatedColor] = useState(new Animated.Value(0));
+  const { mode } = useTimer();
 
   useEffect(() => {
     let toValue = 1;

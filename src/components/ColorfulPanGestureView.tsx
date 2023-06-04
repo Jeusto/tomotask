@@ -1,29 +1,24 @@
 import { useAnimatedModeColor } from '@/hooks';
-import { TimerMode } from '@/models';
 import { Animated, StyleProp, StyleSheet, ViewProps } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import { useTimer } from '@/hooks/TimerContext';
 
 const SWIPE_LEFT_THRESHOLD = -40;
 
 interface Props extends ViewProps {
-  mode: TimerMode;
-  onGesture: () => void;
   children: React.ReactNode;
   style?: StyleProp<any>;
 }
 
-export const ColorfulPanGestureView = ({
-  mode,
-  onGesture,
-  children,
-  style,
-}: Props) => {
+export const ColorfulPanGestureView = ({ children, style }: Props) => {
+  const { mode, setNextTimerMode } = useTimer();
+
   const handleGestureStateChange = (event: any) => {
     if (
       event.nativeEvent.state === State.END &&
       event.nativeEvent.translationX < SWIPE_LEFT_THRESHOLD
     ) {
-      onGesture();
+      setNextTimerMode();
     }
   };
 
@@ -34,20 +29,9 @@ export const ColorfulPanGestureView = ({
 
   return (
     <PanGestureHandler onHandlerStateChange={handleGestureStateChange}>
-      <Animated.View
-        style={[staticStyles.container, dynamicStyles.container, style]}
-      >
+      <Animated.View style={[dynamicStyles.container, style]}>
         {children}
       </Animated.View>
     </PanGestureHandler>
   );
 };
-
-const staticStyles = StyleSheet.create({
-  container: {
-    paddingTop: 250,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
