@@ -1,6 +1,6 @@
-import { useAppStateChange } from '@/hooks/useAppStateChange';
-import { useNotification } from '@/hooks/useNotification';
-import { useSound } from '@/hooks/useSound';
+import { useAppStateChange } from '@/hooks';
+import { useNotification } from '@/hooks';
+import { useSound } from '@/hooks';
 import type { TimerMode, TimerState } from '@/models';
 import { useAppSettingsStore } from '@/stores/settingsStore';
 import { useTodolistStore } from '@/stores/todolistStore';

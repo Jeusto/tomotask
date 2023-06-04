@@ -1,6 +1,6 @@
 import type { SingleTask } from '@/models';
 import { Group } from '@/components/layout';
-import { useSound } from '@/hooks/useSound';
+import { useSound } from '@/hooks';
 
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Checkbox from 'expo-checkbox';

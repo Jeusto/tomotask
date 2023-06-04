@@ -1,6 +1,6 @@
 import type { TimerMode } from '@/models';
 import { modeColors } from '@/style/theme';
-import { useSound } from '@/hooks/useSound';
+import { useSound } from '@/hooks';
 
 import Feather from '@expo/vector-icons/Feather';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
