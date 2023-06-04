@@ -1,7 +1,6 @@
-import { Group, Center } from '@/components/layout';
-
+import { Center, Group } from '@/components/layout';
 import Feather from '@expo/vector-icons/Feather';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 interface Props {
   showAddDialog: () => void;

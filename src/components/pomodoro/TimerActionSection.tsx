@@ -58,7 +58,6 @@ export const TimerActionSection = ({
 
 const staticStyles = StyleSheet.create({
   button: {
-    borderWidth: 0,
     borderRadius: 4,
     shadowColor: 'rgb(235, 235, 235)',
     shadowOffset: {
@@ -75,7 +74,6 @@ const staticStyles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    transform: [{ translateY: 6 }],
   },
   buttonText: {
     fontSize: 22,

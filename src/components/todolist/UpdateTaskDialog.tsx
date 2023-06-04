@@ -7,14 +7,14 @@ import { Dialog, Button } from '@rneui/themed';
 import { useEffect, useState } from 'react';
 
 interface Props {
-  hideDialog: () => void;
+  toggleDialog: () => void;
   dialogVisible: {
     visible: boolean;
     taskId: number;
   };
 }
 
-export const UpdateTaskDialog = ({ hideDialog, dialogVisible }: Props) => {
+export const UpdateTaskDialog = ({ toggleDialog, dialogVisible }: Props) => {
   const { updateTask, deleteTask, tasks } = useTodolistStore();
   const task = tasks.find((t) => t.id === dialogVisible.taskId);
 
@@ -33,7 +33,7 @@ export const UpdateTaskDialog = ({ hideDialog, dialogVisible }: Props) => {
   }, [task]);
 
   return (
-    <Dialog isVisible={dialogVisible.visible} onBackdropPress={hideDialog}>
+    <Dialog isVisible={dialogVisible.visible} onBackdropPress={toggleDialog}>
       <Dialog.Title title="Update task" />
       <TextInput
         placeholder="Task title"
@@ -64,7 +64,7 @@ export const UpdateTaskDialog = ({ hideDialog, dialogVisible }: Props) => {
         color="#e06c75"
         onPress={() => {
           deleteTask(dialogVisible.taskId);
-          hideDialog();
+          toggleDialog();
         }}
       >
         <Feather
@@ -80,10 +80,10 @@ export const UpdateTaskDialog = ({ hideDialog, dialogVisible }: Props) => {
           title="UPDATE TASK"
           onPress={() => {
             updateTask(dialogVisible.taskId, newTaskDetails);
-            hideDialog();
+            toggleDialog();
           }}
         />
-        <Dialog.Button title="CANCEL" onPress={hideDialog} />
+        <Dialog.Button title="CANCEL" onPress={toggleDialog} />
       </Dialog.Actions>
     </Dialog>
   );

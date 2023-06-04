@@ -1,16 +1,15 @@
 import { useTodolistStore } from '@/stores/todolistStore';
 import { NewTask } from '@/models';
-
 import { StyleSheet, TextInput, Text } from 'react-native';
 import { Dialog } from '@rneui/themed';
 import { useState } from 'react';
 
 interface Props {
   dialogVisible: boolean;
-  hideDialog: () => void;
+  toggleDialog: () => void;
 }
 
-export const AddTaskDialog = ({ dialogVisible, hideDialog }: Props) => {
+export const AddTaskDialog = ({ dialogVisible, toggleDialog }: Props) => {
   const { addTask } = useTodolistStore();
   const [error, setError] = useState('');
 
@@ -35,13 +34,13 @@ export const AddTaskDialog = ({ dialogVisible, hideDialog }: Props) => {
   const addNewTask = () => {
     if (validateTaskDetails()) {
       addTask(newTaskDetails);
-      hideDialog();
+      toggleDialog();
       resetTaskDetails();
     }
   };
 
   return (
-    <Dialog isVisible={dialogVisible} onBackdropPress={hideDialog}>
+    <Dialog isVisible={dialogVisible} onBackdropPress={toggleDialog}>
       <Dialog.Title title="Add new task" />
       <TextInput
         placeholder="Task title"
@@ -73,7 +72,7 @@ export const AddTaskDialog = ({ dialogVisible, hideDialog }: Props) => {
             addNewTask();
           }}
         />
-        <Dialog.Button title="CANCEL" onPress={hideDialog} />
+        <Dialog.Button title="CANCEL" onPress={toggleDialog} />
       </Dialog.Actions>
     </Dialog>
   );

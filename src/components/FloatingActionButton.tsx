@@ -1,18 +1,17 @@
 import { useTodolistStore } from '@/stores/todolistStore';
-
-import { useState } from 'react';
 import { SpeedDial } from '@rneui/themed';
+import { useState } from 'react';
 
 const ICON_COLOR = '#555555';
 const DIAL_BG_COLOR = '#ffffff';
 
 interface Props {
-  showAddDialog: () => void;
+  toggleAddDialog: () => void;
   navigateToSettings: () => void;
 }
 
 export const FloatingActionButton = ({
-  showAddDialog,
+  toggleAddDialog,
   navigateToSettings,
 }: Props) => {
   const { deleteAllTasks, deleteCheckedTasks } = useTodolistStore();
@@ -63,7 +62,7 @@ export const FloatingActionButton = ({
         icon={{ name: 'add', color: ICON_COLOR }}
         title="Add new task"
         onPress={() => {
-          showAddDialog();
+          toggleAddDialog();
           toggleOpen();
         }}
         color={DIAL_BG_COLOR}
