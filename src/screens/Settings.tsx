@@ -141,7 +141,7 @@ export function Settings() {
               accessibilityLabel="Enable notifications"
               value={settings.notifications.enabled}
               onValueChange={(value) =>
-                setAppSettings({
+                setSettings({
                   ...appSettings,
                   notifications: { ...settings.notifications, enabled: value },
                 })
